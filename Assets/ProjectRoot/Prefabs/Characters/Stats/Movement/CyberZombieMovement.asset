@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: CyberZombieMovement
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 8
+  <Acceleration>k__BackingField: 30

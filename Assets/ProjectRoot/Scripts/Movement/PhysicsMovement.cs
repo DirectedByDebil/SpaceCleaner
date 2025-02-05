@@ -2,7 +2,7 @@
 
 namespace Movement
 {
-    public class MovementModel
+    public class PhysicsMovement
     {
 
         private readonly float _speed;
@@ -10,7 +10,7 @@ namespace Movement
         private readonly Rigidbody _rb;
 
 
-        public MovementModel(IMovementStats stats, Rigidbody rb)
+        public PhysicsMovement(IMovementStats stats, Rigidbody rb)
         {
 
             _speed = stats.Speed;

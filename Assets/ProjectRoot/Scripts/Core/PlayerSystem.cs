@@ -9,15 +9,15 @@ namespace Core
 
         private readonly PlayerMovementControl _movementControl;
 
-        private readonly MovementModel _movementModel;
+        private readonly PhysicsMovement _movementModel;
 
 
-        public PlayerSystem(ICharacter player)
+        public PlayerSystem(IPlayer player)
         {
 
             _movementControl = new PlayerMovementControl();
 
-            _movementModel = new MovementModel(
+            _movementModel = new PhysicsMovement(
                 player.MovementStats, player.Rigidbody);
         }
 

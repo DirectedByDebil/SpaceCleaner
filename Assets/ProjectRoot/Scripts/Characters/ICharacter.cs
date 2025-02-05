@@ -1,6 +1,5 @@
-﻿using Movement;
-using Combat;
-using UnityEngine;
+﻿using Combat;
+using Movement;
 
 namespace Characters
 {
@@ -10,8 +9,5 @@ namespace Characters
         public IHealthStats HealthStats { get; }
 
         public IMovementStats MovementStats { get; }
-
-
-        public Rigidbody Rigidbody { get; }
     }
 }

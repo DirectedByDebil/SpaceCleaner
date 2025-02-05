@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Player Movement
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 10
+  <Acceleration>k__BackingField: 30

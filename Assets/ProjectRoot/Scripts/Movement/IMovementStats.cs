@@ -4,5 +4,7 @@ namespace Movement
     {
 
         public float Speed { get;}
+
+        public float Acceleration { get;}
     }
 }

@@ -12,21 +12,38 @@ namespace Core
         #region Player
 
         [SerializeField, Space]
-        private Character _player;
+        private Player _player;
 
         [SerializeField, Space]
         private bool _isInputRaw;
 
         private PlayerSystem _playerSystem;
-        
+
         #endregion
 
+
+        #region Enemies
+
+        [SerializeField, Space]
+        private EnemiesHandler _enemies;
+
+        private EnemiesSystem _enemiesSystem;
+
+
+        [SerializeField, Range(0, 1),
+            Header("Send player position to enemies interval"), Space]
+        private float _checkPositionTime;
+        
+        #endregion
 
 
         private void Awake()
         {
 
             _playerSystem = new PlayerSystem(_player);
+
+            _enemiesSystem = new EnemiesSystem(
+                _enemies.AllEnemies, _enemies.ActiveEnemies);
         }
 
 
@@ -34,6 +51,8 @@ namespace Core
         {
 
             _playerSystem.SetSystem();
+
+            _enemiesSystem.SetSystem();
         }
 
 
@@ -41,13 +60,18 @@ namespace Core
         {
 
             _playerSystem.UnsetSystem();
+
+            _enemiesSystem.UnsetSystem();
         }
 
 
         private void FixedUpdate()
         {
-
+            
             _playerSystem.HandleInput(_isInputRaw);
+
+            _enemiesSystem.HandleInput(_player.transform.position,
+                _checkPositionTime);
         }
     }
 }

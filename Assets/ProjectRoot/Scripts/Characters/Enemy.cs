@@ -1,11 +1,16 @@
 ﻿using Combat;
 using UnityEngine;
+using UnityEngine.AI;
 using System;
 
 namespace Characters
 {
-    public sealed class Enemy : Character, IDamager
+    [RequireComponent(typeof(NavMeshAgent))]
+    public sealed class Enemy : Character, IDamager, IEnemy
     {
+
+        public NavMeshAgent NavMeshAgent { get => GetComponent<NavMeshAgent>(); }
+
 
         public event Action<GameObject, int> Damaging;
 
@@ -14,9 +19,10 @@ namespace Characters
         private int _damage;
 
 
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            
             GameObject obj = collision.gameObject;
 
 
