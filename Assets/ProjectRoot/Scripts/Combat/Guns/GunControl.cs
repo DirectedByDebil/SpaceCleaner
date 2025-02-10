@@ -15,6 +15,8 @@ namespace Combat.Guns
         private readonly Camera _camera;
 
 
+        private Vector3 _lastDirection;
+
 
         public GunControl()
         {
@@ -29,14 +31,16 @@ namespace Combat.Guns
             if(TryGetDirection(out Vector3 direction))
             {
 
-                DirectionChanged?.Invoke(direction);
+                _lastDirection = direction;
+
+                DirectionChanged?.Invoke(_lastDirection);
+            }
 
 
-                if(Input.GetButton("Fire1"))
-                {
+            if(Input.GetButton("Fire1"))
+            {
 
-                    PullingTrigger?.Invoke(direction);
-                }
+                PullingTrigger?.Invoke(_lastDirection);
             }
         }
 

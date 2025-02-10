@@ -1,6 +1,4 @@
-﻿using Core;
-using Movement;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 namespace Combat.Guns
@@ -8,32 +6,28 @@ namespace Combat.Guns
     public sealed class GunModel: IReloadable
     {
 
-        public event Action<IPhysical, Vector3> Shot;
+        public event Action<Vector3> Shooting;
 
         public event Action<IReloadable, float> Reloading;
 
 
         private readonly IGunStats _stats;
 
-        private readonly IPool<IPhysical> _pool;
-
 
         private bool _canShoot;
 
 
-        public GunModel(IGunStats stats, IPool<IPhysical> pool)
+        public GunModel(IGunStats stats)
         {
 
             _stats = stats;
-
-            _pool = pool;
         }
 
 
         public void Shoot(Vector3 direction)
         {
 
-            if(_canShoot && _pool.TryGetObject(out IPhysical bullet))
+            if(_canShoot)
             {
 
                 _canShoot = false;
@@ -41,7 +35,7 @@ namespace Combat.Guns
 
                 Reloading?.Invoke(this, _stats.RateOfFire);
 
-                Shot?.Invoke(bullet, direction);
+                Shooting?.Invoke(direction);
             }
         }
 

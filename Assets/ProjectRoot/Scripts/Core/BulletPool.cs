@@ -8,6 +8,12 @@ namespace Core
     public sealed class BulletPool : MonoBehaviour, IPool<IPhysical>
     {
 
+        public IReadOnlyCollection<IPhysical> Bullets
+        { 
+            get => _bullets; 
+        }
+
+
         [SerializeField]
         private List<Bullet> _bullets;
 

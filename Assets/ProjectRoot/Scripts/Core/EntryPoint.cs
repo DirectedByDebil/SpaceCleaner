@@ -1,5 +1,6 @@
 using Characters;
 using Combat.Guns;
+using Movement;
 using UnityEngine;
 
 namespace Core
@@ -42,13 +43,29 @@ namespace Core
 
 
         [SerializeField, Space]
+        private Gun _gun;
+
+        #endregion
+
+
+        #region Bullets System
+
+        [SerializeField, Space]
         private BulletPool _bulletPool;
 
 
         [SerializeField, Space]
-        private Gun _gun;
+        private MovementStats _bulletMovementStats;
 
+
+        [SerializeField, Range(1, 3), Space]
+        private float _bulletLifeTime;
+
+
+        private BulletsSystem _bulletsSystem;
+        
         #endregion
+
 
 
         private void Awake()
@@ -60,11 +77,12 @@ namespace Core
                 _enemies.AllEnemies, _enemies.ActiveEnemies);
 
 
-            _shootingSystem = new ShootingSystem();
+            _shootingSystem = new ShootingSystem(_bulletPool);
 
-            GunModel model = new (_gun.Stats, _bulletPool);
+            _shootingSystem.AddGun(_gun);
 
-            _shootingSystem.AddGun(model, _gun.View);
+
+            _bulletsSystem = new BulletsSystem(_bulletMovementStats);
         }
 
 
@@ -76,6 +94,12 @@ namespace Core
             _enemiesSystem.SetSystem();
 
             _shootingSystem.SetSystem();
+
+
+            _shootingSystem.ShootingBullet += _bulletsSystem.OnShootingBullet;
+
+
+            _bulletsSystem.SetSystem(_bulletPool.Bullets);
         }
 
 
@@ -87,6 +111,12 @@ namespace Core
             _enemiesSystem.UnsetSystem();
 
             _shootingSystem.UnsetSystem();
+
+
+            _shootingSystem.ShootingBullet -= _bulletsSystem.OnShootingBullet;
+
+
+            _bulletsSystem.UnsetSystem(_bulletPool.Bullets);
         }
 
 
@@ -100,6 +130,9 @@ namespace Core
 
 
             _shootingSystem.HandleInput();
+
+
+            _bulletsSystem.HandleInput(_bulletLifeTime);
         }
     }
 }
