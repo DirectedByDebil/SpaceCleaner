@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Characters;
+using System;
 
 namespace Combat
 {
@@ -17,18 +18,20 @@ namespace Combat
 
                     _hp = value;
 
-                    Changed?.Invoke(_hp);
+                    Changed?.Invoke(_character, _hp);
                 }
             }
         }
 
 
-        public event Action Ended;
+        public event Action<ICharacter> Ended;
 
-        public event Action<int> Changed;
+        public event Action<ICharacter, int> Changed;
 
-        public event Action ShieldEnded;
+        public event Action<ICharacter> ShieldEnded;
 
+
+        private readonly ICharacter _character;
 
         private readonly int _maxHP;
 
@@ -38,8 +41,13 @@ namespace Combat
 
 
 
-        public Health(IHealthStats stats)
+        public Health(ICharacter character)
         {
+
+            _character = character;
+
+
+            IHealthStats stats = _character.HealthStats;
 
             _maxHP = stats.MaxHp;
             
@@ -57,8 +65,10 @@ namespace Combat
 
             int newHp = _hp + diff;
 
+
             if(newHp > _maxHP)
             {
+
                 newHp = _maxHP;
             }
 
@@ -67,7 +77,7 @@ namespace Combat
         }
 
 
-        public void ApplyDamage(int diff)
+        public void TryApplyDamage(int diff)
         {
 
             if (_hasShield) return;
@@ -75,11 +85,13 @@ namespace Combat
 
             int newHp = _hp - diff;
 
+
             if(newHp <= 0)
             {
+
                 newHp = 0;
 
-                Ended?.Invoke();
+                Ended?.Invoke(_character);
             }
 
             Current = newHp;
@@ -93,7 +105,7 @@ namespace Combat
 
             _hasShield = false;
 
-            ShieldEnded?.Invoke();
+            ShieldEnded?.Invoke(_character);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Combat;
+using UnityEngine;
 
 namespace Characters
 {
@@ -7,5 +8,11 @@ namespace Characters
     {
 
         public Rigidbody Rigidbody { get => GetComponent<Rigidbody>(); }
+
+        public override IHealthView HealthView { get => _healthView; }
+
+
+        [SerializeField, Space]
+        private PlayerHealthView _healthView;
     }
 }

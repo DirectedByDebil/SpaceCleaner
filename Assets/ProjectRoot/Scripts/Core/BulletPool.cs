@@ -1,14 +1,13 @@
-﻿using Combat;
-using Movement;
+﻿using Combat.Bullets;
 using UnityEngine;
 using System.Collections.Generic;
 
 namespace Core
 {
-    public sealed class BulletPool : MonoBehaviour, IPool<IPhysical>
+    public sealed class BulletPool : MonoBehaviour, IPool<IBullet>
     {
 
-        public IReadOnlyCollection<IPhysical> Bullets
+        public IReadOnlyCollection<IBullet> Bullets
         { 
             get => _bullets; 
         }
@@ -36,7 +35,7 @@ namespace Core
         }
 
 
-        public bool TryGetObject(out IPhysical bullet)
+        public bool TryGetObject(out IBullet bullet)
         {
 
             bullet = _bullets.Find(IsAvailable);

@@ -1,12 +1,11 @@
-﻿using Movement;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
-namespace Combat
+namespace Combat.Bullets
 {
 
     [RequireComponent(typeof(Rigidbody))]
-    public sealed class Bullet : MonoBehaviour, IDamager, IPhysical
+    public sealed class Bullet : MonoBehaviour, IBullet
     {
 
         public Rigidbody Rigidbody

@@ -1,6 +1,5 @@
 ﻿using Characters;
 using Movement;
-using Combat;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -17,8 +16,7 @@ namespace Core
         private readonly List<AgentMovement> _activeAgents;
 
 
-        public EnemiesSystem(IReadOnlyCollection<IEnemy> allEnemies,
-            IReadOnlyCollection<IEnemy> activeEnemies)
+        public EnemiesSystem(IReadOnlyCollection<IEnemy> allEnemies)
         {
 
             _control = new EnemyMovementControl();
@@ -29,9 +27,7 @@ namespace Core
             FillDictionary(allEnemies);
 
 
-            _activeAgents = new List<AgentMovement>(activeEnemies.Count);
-
-            FillActiveAgents(activeEnemies);
+            _activeAgents = new List<AgentMovement>(allEnemies.Count);
         }
 
 
@@ -40,32 +36,6 @@ namespace Core
 
             _control.HandleInput(destination, interval);
         }
-
-
-        #region Set/Unset System
-
-        public void SetSystem()
-        {
-
-            foreach(AgentMovement agent in _activeAgents)
-            {
-
-                _control.Pressed += agent.MakeMovement;
-            }
-        }
-
-
-        public void UnsetSystem()
-        {
-
-            foreach (AgentMovement agent in _activeAgents)
-            {
-
-                _control.Pressed -= agent.MakeMovement;
-            }
-        }
-
-        #endregion
 
 
         #region Add/Remove Enemy
@@ -98,7 +68,6 @@ namespace Core
         #endregion
 
 
-        #region Fill All/Active Enemies
         private void FillDictionary(IEnumerable<IEnemy> enemies)
         {
 
@@ -110,23 +79,6 @@ namespace Core
                 _allAgents.Add(enemy, agent);
             }
         }
-
-
-        private void FillActiveAgents(IEnumerable<IEnemy> enemies)
-        {
-
-            foreach(IEnemy enemy in enemies)
-            {
-
-                if(TryGetAgent(enemy, out AgentMovement agent))
-                {
-
-                    _activeAgents.Add(agent);
-                }
-            }
-        }
-
-        #endregion
 
         
         private bool TryGetAgent(IEnemy enemy, out AgentMovement agent)

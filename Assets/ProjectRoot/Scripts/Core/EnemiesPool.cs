@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public sealed class EnemiesHandler : MonoBehaviour
+    public sealed class EnemiesPool : MonoBehaviour, IPool<IEnemy>
     {
 
-        public IReadOnlyCollection<IEnemy> AllEnemies
+        public IReadOnlyCollection<Enemy> AllEnemies
         { 
             get => _allEnemies;
         }
@@ -56,6 +56,22 @@ namespace Core
 
                 _activeEnemies.Add(enemy);
             }
+        }
+
+
+        public bool TryGetObject(out IEnemy enemy)
+        {
+
+            enemy = _allEnemies.Find(IsAvailable);
+
+            return enemy != null;
+        }
+
+
+        private bool IsAvailable(Enemy enemy)
+        {
+
+            return !enemy.gameObject.activeInHierarchy;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Combat.Guns;
+using Combat.Bullets;
 using Movement;
 using UnityEngine;
 using System;
@@ -10,7 +11,7 @@ namespace Core
     public sealed class ShootingSystem
     {
 
-        public event Action<IPhysical, Vector3> ShootingBullet;
+        public event Action<IBullet, Vector3> ShootingBullet;
 
 
         private readonly Dictionary<IGun, GunModel> _guns;
@@ -18,7 +19,7 @@ namespace Core
 
         private readonly GunControl _control;
 
-        private readonly IPool<IPhysical> _pool;
+        private readonly IPool<IBullet> _pool;
 
 
         private IGun _currentGun;
@@ -29,7 +30,7 @@ namespace Core
 
 
 
-        public ShootingSystem(IPool<IPhysical> bulletPool)
+        public ShootingSystem(IPool<IBullet> bulletPool)
         {
 
             _pool = bulletPool;
@@ -112,7 +113,7 @@ namespace Core
         private void OnShooting(Vector3 direction)
         {
 
-            if(_pool.TryGetObject(out IPhysical bullet))
+            if(_pool.TryGetObject(out IBullet bullet))
             {
 
                 Rigidbody body = bullet.Rigidbody;

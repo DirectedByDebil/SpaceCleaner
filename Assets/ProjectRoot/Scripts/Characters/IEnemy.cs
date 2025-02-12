@@ -1,8 +1,9 @@
-﻿using UnityEngine.AI;
+﻿using Combat;
+using UnityEngine.AI;
 
 namespace Characters
 {
-    public interface IEnemy: ICharacter
+    public interface IEnemy: ICharacter, IDamager
     {
 
         public NavMeshAgent NavMeshAgent { get; }

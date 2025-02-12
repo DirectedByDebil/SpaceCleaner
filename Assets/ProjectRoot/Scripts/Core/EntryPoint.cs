@@ -25,7 +25,7 @@ namespace Core
         #region Enemies
 
         [SerializeField, Space]
-        private EnemiesHandler _enemies;
+        private EnemiesPool _enemies;
 
         private EnemiesSystem _enemiesSystem;
 
@@ -63,18 +63,21 @@ namespace Core
 
 
         private BulletsSystem _bulletsSystem;
-        
+
         #endregion
 
+
+        #region Game Logic
+
+        private GameProgress _gameProgress;
+
+        #endregion
 
 
         private void Awake()
         {
 
             _playerSystem = new PlayerSystem(_player);
-
-            _enemiesSystem = new EnemiesSystem(
-                _enemies.AllEnemies, _enemies.ActiveEnemies);
 
 
             _shootingSystem = new ShootingSystem(_bulletPool);
@@ -83,6 +86,11 @@ namespace Core
 
 
             _bulletsSystem = new BulletsSystem(_bulletMovementStats);
+
+            _enemiesSystem = new EnemiesSystem(_enemies.AllEnemies);
+
+
+            _gameProgress = new GameProgress(_enemiesSystem);
         }
 
 
@@ -91,8 +99,6 @@ namespace Core
 
             _playerSystem.SetSystem();
 
-            _enemiesSystem.SetSystem();
-
             _shootingSystem.SetSystem();
 
 
@@ -100,6 +106,15 @@ namespace Core
 
 
             _bulletsSystem.SetSystem(_bulletPool.Bullets);
+
+
+            _gameProgress.SetPlayer(_player);
+
+            _gameProgress.SetEnemies(_enemies.AllEnemies);
+
+            _gameProgress.SetDamagers(_bulletPool.Bullets);
+
+            _gameProgress.SetSystem();
         }
 
 
@@ -108,8 +123,6 @@ namespace Core
 
             _playerSystem.UnsetSystem();
 
-            _enemiesSystem.UnsetSystem();
-
             _shootingSystem.UnsetSystem();
 
 
@@ -117,6 +130,15 @@ namespace Core
 
 
             _bulletsSystem.UnsetSystem(_bulletPool.Bullets);
+            
+
+            _gameProgress.UnsetPlayer(_player);
+
+            _gameProgress.UnsetEnemies(_enemies.AllEnemies);
+
+            _gameProgress.UnsetDamagers(_bulletPool.Bullets);
+
+            _gameProgress.UnsetSystem();
         }
 
 

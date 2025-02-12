@@ -750,11 +750,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 3479659806481108801, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4758530102047567043, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1107,11 +1102,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 3479659806481108801, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4758530102047567043, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1298,7 +1288,7 @@ GameObject:
   - component: {fileID: 994987514}
   - component: {fileID: 994987515}
   m_Layer: 0
-  m_Name: Enemies
+  m_Name: Enemies Pool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1340,7 +1330,9 @@ MonoBehaviour:
   - {fileID: 471939884}
   - {fileID: 1705010352}
   - {fileID: 761678906}
-  _activeEnemies: []
+  _activeEnemies:
+  - {fileID: 1944254269}
+  - {fileID: 471939884}
 --- !u!1001 &1008578409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1523,11 +1515,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3479659806481108801, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4758530102047567043, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
         type: 3}
@@ -1847,11 +1834,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3479659806481108801, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4758530102047567043, guid: 82fbd5e4282cf054ca4bd9ad8a6b6804,
         type: 3}
@@ -2334,7 +2316,7 @@ GameObject:
   - component: {fileID: 2012605341}
   - component: {fileID: 2012605340}
   m_Layer: 0
-  m_Name: Bullets
+  m_Name: Bullet Pool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

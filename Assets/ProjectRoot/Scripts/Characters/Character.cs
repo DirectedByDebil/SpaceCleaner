@@ -5,12 +5,14 @@ using UnityEngine;
 namespace Characters
 {
 
-    public class Character : MonoBehaviour, ICharacter
+    public abstract class Character : MonoBehaviour, ICharacter
     {
 
         public IHealthStats HealthStats { get => _healthStats; }
 
         public IMovementStats MovementStats { get => _movementStats; }
+
+        public abstract IHealthView HealthView { get; }
 
 
         [SerializeField, Space]
