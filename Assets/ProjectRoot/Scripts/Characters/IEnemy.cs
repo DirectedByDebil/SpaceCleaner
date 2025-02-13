@@ -7,5 +7,7 @@ namespace Characters
     {
 
         public NavMeshAgent NavMeshAgent { get; }
+
+        public EnemyDifficulty EnemyDifficulty { get; }
     }
 }

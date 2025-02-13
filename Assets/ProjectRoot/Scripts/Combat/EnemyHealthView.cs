@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 
 namespace Combat
 {
@@ -7,7 +8,8 @@ namespace Combat
 
         public void OnHealthChanged(int health)
         {
-            
+
+            GUIOutput.AddOutput(gameObject.name, health);
         }
 
 

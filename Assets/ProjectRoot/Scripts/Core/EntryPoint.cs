@@ -1,4 +1,5 @@
 using Characters;
+using Combat;
 using Combat.Guns;
 using Movement;
 using UnityEngine;
@@ -11,10 +12,10 @@ namespace Core
 
         #region Player
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private Player _player;
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private bool _isInputRaw;
 
         private PlayerSystem _playerSystem;
@@ -24,13 +25,13 @@ namespace Core
 
         #region Enemies
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private EnemiesPool _enemies;
 
-        private EnemiesSystem _enemiesSystem;
+        private EnemyMovementSystem _enemyMovementSystem;
 
 
-        [SerializeField, Range(0, 1),
+        [SerializeField, HideInInspector, Range(0, 1),
             Header("Send player position to enemies interval"), Space]
         private float _checkPositionTime;
 
@@ -42,7 +43,7 @@ namespace Core
         private ShootingSystem _shootingSystem;
 
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private Gun _gun;
 
         #endregion
@@ -50,15 +51,15 @@ namespace Core
 
         #region Bullets System
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private BulletPool _bulletPool;
 
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private MovementStats _bulletMovementStats;
 
 
-        [SerializeField, Range(1, 3), Space]
+        [SerializeField, HideInInspector, Range(1, 3), Space]
         private float _bulletLifeTime;
 
 
@@ -70,6 +71,10 @@ namespace Core
         #region Game Logic
 
         private GameProgress _gameProgress;
+
+
+        [SerializeField, HideInInspector, Space]
+        private TrapHandler _traps;
 
         #endregion
 
@@ -87,10 +92,10 @@ namespace Core
 
             _bulletsSystem = new BulletsSystem(_bulletMovementStats);
 
-            _enemiesSystem = new EnemiesSystem(_enemies.AllEnemies);
+            _enemyMovementSystem = new EnemyMovementSystem(_enemies.AllEnemies);
 
 
-            _gameProgress = new GameProgress(_enemiesSystem);
+            _gameProgress = new GameProgress(_enemyMovementSystem);
         }
 
 
@@ -113,6 +118,8 @@ namespace Core
             _gameProgress.SetEnemies(_enemies.AllEnemies);
 
             _gameProgress.SetDamagers(_bulletPool.Bullets);
+
+            _gameProgress.SetTraps(_traps.Traps);
 
             _gameProgress.SetSystem();
         }
@@ -138,6 +145,8 @@ namespace Core
 
             _gameProgress.UnsetDamagers(_bulletPool.Bullets);
 
+            _gameProgress.UnsetTraps(_traps.Traps);
+
             _gameProgress.UnsetSystem();
         }
 
@@ -147,7 +156,7 @@ namespace Core
             
             _playerSystem.HandleInput(_isInputRaw);
 
-            _enemiesSystem.HandleInput(_player.transform.position,
+            _enemyMovementSystem.HandleInput(_player.transform.position,
                 _checkPositionTime);
 
 

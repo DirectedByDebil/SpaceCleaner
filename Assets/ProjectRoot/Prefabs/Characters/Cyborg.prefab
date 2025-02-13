@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 7389389221472562594}
   - component: {fileID: 8125142397448238638}
   - component: {fileID: 5500186129577868134}
-  - component: {fileID: 6918267409608566559}
+  - component: {fileID: 8291066591202446828}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Cyborg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4ca147a637870cb40b923a4d86e07c45, type: 2}
+  - {fileID: 2100000, guid: 260f010e78b9ace48909cf49c1c2fb27, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,10 +121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cf570d52e0c5db429e857b34b1f3d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthStats: {fileID: 11400000, guid: 78cb1fded7b2ade48b2018f5943cfb65, type: 2}
-  _movementStats: {fileID: 11400000, guid: fbbc5a33f0925954782a2309c74f4469, type: 2}
-  <EnemyDifficulty>k__BackingField: 0
-  _damage: 1
+  _healthStats: {fileID: 11400000, guid: 16fdcbea5c974cd4892918a426d83484, type: 2}
+  _movementStats: {fileID: 11400000, guid: 5e4ea5c817ce0cc4c9625a86b26a70be, type: 2}
+  <EnemyDifficulty>k__BackingField: 1
+  _damage: 5
   _healthView: {fileID: 5500186129577868134}
 --- !u!195 &8125142397448238638
 NavMeshAgent:
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593fb4842e8cd2741b89fe0c381b2365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &6918267409608566559
+--- !u!54 &8291066591202446828
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

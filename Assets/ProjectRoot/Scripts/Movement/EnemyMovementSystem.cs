@@ -1,11 +1,10 @@
 ﻿using Characters;
-using Movement;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Core
+namespace Movement
 {
-    public sealed class EnemiesSystem
+    public sealed class EnemyMovementSystem
     {
 
         private readonly EnemyMovementControl _control;
@@ -16,7 +15,7 @@ namespace Core
         private readonly List<AgentMovement> _activeAgents;
 
 
-        public EnemiesSystem(IReadOnlyCollection<IEnemy> allEnemies)
+        public EnemyMovementSystem(IReadOnlyCollection<IEnemy> allEnemies)
         {
 
             _control = new EnemyMovementControl();

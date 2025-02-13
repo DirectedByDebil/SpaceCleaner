@@ -1,9 +1,8 @@
-﻿using Combat;
-using Characters;
+﻿using Characters;
 using System;
 using System.Collections.Generic;
 
-namespace Core
+namespace Combat
 {
     public sealed class CombatSystem
     {

@@ -1,5 +1,6 @@
 ﻿using Characters;
 using Combat;
+using Movement;
 using Pickables;
 using UnityEngine;
 using System.Collections.Generic;
@@ -16,13 +17,15 @@ namespace Core
 
         private readonly CombatSystem _combatSystem;
 
-        private readonly EnemiesSystem _enemiesSystem;
+        private readonly EnemyMovementSystem _enemyMovementSystem;
+
+        private readonly EnemySpawnSystem _enemySpawnSystem;
 
 
         //Spawn system
 
 
-        public GameProgress(EnemiesSystem enemiesSystem)
+        public GameProgress(EnemyMovementSystem enemyMovementSystem)
         {
 
             _characters = new Dictionary<GameObject, ICharacter>();
@@ -32,7 +35,7 @@ namespace Core
 
             _combatSystem = new CombatSystem();
 
-            _enemiesSystem = enemiesSystem;
+            _enemyMovementSystem = enemyMovementSystem;
         }
 
 
@@ -130,7 +133,7 @@ namespace Core
                 if(enemy.gameObject.activeInHierarchy)
                 {
 
-                    _enemiesSystem.AddEnemy(enemy);
+                    _enemyMovementSystem.AddEnemy(enemy);
                 }
             }
         }
@@ -150,7 +153,7 @@ namespace Core
                 _characters.Remove(enemy.gameObject);
 
 
-                _enemiesSystem.RemoveEnemy(enemy);
+                _enemyMovementSystem.RemoveEnemy(enemy);
             }
         }
 
@@ -203,7 +206,7 @@ namespace Core
             if(character is IEnemy enemy)
             {
 
-                _enemiesSystem.RemoveEnemy(enemy);
+                _enemyMovementSystem.RemoveEnemy(enemy);
 
             }
             else if (character is IPlayer player)
