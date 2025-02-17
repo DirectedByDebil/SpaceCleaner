@@ -63,6 +63,13 @@ namespace Combat
         #endregion
 
 
+        public void RestoreCharacter(ICharacter character)
+        {
+
+            _healths[character].SetStats(character.HealthStats);
+        }
+
+
         public void OnDamaging(ICharacter character, int damage)
         {
             

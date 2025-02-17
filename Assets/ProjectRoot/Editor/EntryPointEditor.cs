@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace Core
 {
@@ -9,6 +10,7 @@ namespace Core
     {
 
         private DisplayCategory _selectedCategory;
+
 
         #region Player
 
@@ -41,6 +43,25 @@ namespace Core
         private SerializedProperty _traps;
 
         #endregion
+
+
+        #region Enemies Spawn
+        
+        private SerializedProperty _spawnSettings;
+        
+        private SerializedProperty _spawnPositionPool;
+        
+        #endregion
+
+
+        #region Camera
+
+        private SerializedProperty _cameraSmoothTime;
+       
+        #endregion
+
+
+        private SpawnSettingsDrawer _spawnSettingsDrawer = new ();
 
 
         public override void OnInspectorGUI()
@@ -86,6 +107,14 @@ namespace Core
             _checkPositionTime = serializedObject.FindProperty("_checkPositionTime");
             
             _traps = serializedObject.FindProperty("_traps");
+
+
+            _spawnSettings = serializedObject.FindProperty("_spawnSettings");
+
+            _spawnPositionPool = serializedObject.FindProperty("_spawnPositionPool");
+
+
+            _cameraSmoothTime = serializedObject.FindProperty("_cameraSmoothTime");
         }
 
 
@@ -127,6 +156,22 @@ namespace Core
                 case DisplayCategory.Enemies:
 
                     DrawProperties( _enemies, _checkPositionTime, _traps);
+                    
+                    break;
+
+
+                case DisplayCategory.SpawnSettings:
+
+                    _spawnSettingsDrawer.DrawSpawnSettings(_spawnSettings);
+
+                    DrawProperties(_spawnPositionPool);
+
+                    break;
+
+
+                case DisplayCategory.Camera:
+
+                    DrawProperties(_cameraSmoothTime);
                     break;
 
 

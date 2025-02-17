@@ -1,6 +1,7 @@
 using Characters;
 using Combat;
 using Combat.Guns;
+using Effects;
 using Movement;
 using UnityEngine;
 
@@ -24,17 +25,29 @@ namespace Core
 
 
         #region Enemies
+        
+        private EnemySystem _enemySystem;
+
 
         [SerializeField, HideInInspector, Space]
         private EnemiesPool _enemies;
-
-        private EnemyMovementSystem _enemyMovementSystem;
 
 
         [SerializeField, HideInInspector, Range(0, 1),
             Header("Send player position to enemies interval"), Space]
         private float _checkPositionTime;
 
+        #endregion
+
+
+        #region Enemies Spawn
+
+        [SerializeField, HideInInspector, Space]
+        private SpawnSettings _spawnSettings;
+
+
+        [SerializeField, HideInInspector, Space]
+        private PositionPool _spawnPositionPool;
         #endregion
 
 
@@ -79,6 +92,16 @@ namespace Core
         #endregion
 
 
+        #region Effects
+
+        private CameraEffects _cameraEffects;
+
+        [SerializeField, HideInInspector, Range(0, 1f), Space]
+        private float _cameraSmoothTime;
+
+        #endregion
+
+
         private void Awake()
         {
 
@@ -92,10 +115,13 @@ namespace Core
 
             _bulletsSystem = new BulletsSystem(_bulletMovementStats);
 
-            _enemyMovementSystem = new EnemyMovementSystem(_enemies.AllEnemies);
+            _enemySystem = new EnemySystem(_enemies, _spawnPositionPool);
 
 
-            _gameProgress = new GameProgress(_enemyMovementSystem);
+            _gameProgress = new GameProgress(_enemySystem);
+
+
+            _cameraEffects = new CameraEffects(Camera.main);
         }
 
 
@@ -156,14 +182,21 @@ namespace Core
             
             _playerSystem.HandleInput(_isInputRaw);
 
-            _enemyMovementSystem.HandleInput(_player.transform.position,
+
+            _enemySystem.HandleMovement(_player.transform.position,
                 _checkPositionTime);
+
+            _enemySystem.HandleSpawn(_spawnSettings);
 
 
             _shootingSystem.HandleInput();
 
 
             _bulletsSystem.HandleInput(_bulletLifeTime);
+
+
+            _cameraEffects.Follow(_player.transform.position,
+                _cameraSmoothTime);
         }
     }
 }

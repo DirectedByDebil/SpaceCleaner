@@ -51,10 +51,17 @@ namespace Combat
 
             _maxHP = stats.MaxHp;
             
+
+            SetStats(stats);
+        }
+
+
+        public void SetStats(IHealthStats stats)
+        {
+
             _hasShield = stats.HasShield;
 
-
-            _hp = _maxHP;
+            Current = _maxHP;
         }
 
 

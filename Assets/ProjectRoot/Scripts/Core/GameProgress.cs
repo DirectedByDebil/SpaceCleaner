@@ -1,6 +1,5 @@
 ﻿using Characters;
 using Combat;
-using Movement;
 using Pickables;
 using UnityEngine;
 using System.Collections.Generic;
@@ -17,15 +16,10 @@ namespace Core
 
         private readonly CombatSystem _combatSystem;
 
-        private readonly EnemyMovementSystem _enemyMovementSystem;
-
-        private readonly EnemySpawnSystem _enemySpawnSystem;
+        private readonly EnemySystem _enemySystem;
 
 
-        //Spawn system
-
-
-        public GameProgress(EnemyMovementSystem enemyMovementSystem)
+        public GameProgress(EnemySystem enemySystem)
         {
 
             _characters = new Dictionary<GameObject, ICharacter>();
@@ -35,7 +29,7 @@ namespace Core
 
             _combatSystem = new CombatSystem();
 
-            _enemyMovementSystem = enemyMovementSystem;
+            _enemySystem = enemySystem;
         }
 
 
@@ -129,11 +123,10 @@ namespace Core
                 _combatSystem.AddCharacter(enemy);
 
 
-                //#TODO remove this
                 if(enemy.gameObject.activeInHierarchy)
                 {
 
-                    _enemyMovementSystem.AddEnemy(enemy);
+                    _enemySystem.AddEnemy(enemy);
                 }
             }
         }
@@ -153,7 +146,7 @@ namespace Core
                 _characters.Remove(enemy.gameObject);
 
 
-                _enemyMovementSystem.RemoveEnemy(enemy);
+                _enemySystem.RemoveEnemy(enemy);
             }
         }
 
@@ -165,12 +158,22 @@ namespace Core
         public void SetSystem()
         {
 
+            _enemySystem.SetSystem();
+
+            _enemySystem.EnemyAdded += _combatSystem.RestoreCharacter;
+
+
             _combatSystem.OnEnded += OnEnded;
         }
 
 
         public void UnsetSystem()
         {
+
+            _enemySystem.UnsetSystem();
+
+            _enemySystem.EnemyAdded -= _combatSystem.RestoreCharacter;
+
 
             _combatSystem.OnEnded -= OnEnded;
         }
@@ -206,7 +209,7 @@ namespace Core
             if(character is IEnemy enemy)
             {
 
-                _enemyMovementSystem.RemoveEnemy(enemy);
+                _enemySystem.RemoveEnemy(enemy);
 
             }
             else if (character is IPlayer player)

@@ -9,6 +9,10 @@
 
         Enemies,
 
+        SpawnSettings,
+
+        Camera,
+
         Pickables
     }
 }
