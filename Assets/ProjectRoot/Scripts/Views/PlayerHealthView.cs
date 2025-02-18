@@ -17,7 +17,7 @@ namespace Combat
         void OnEnable()
         {
             _player = GetComponent<Player>();
-            //Находим кнопку таким запросом, в параметр передаем имя кнопки
+
             _hpBar = uiDocument.rootVisualElement.Q<VisualElement>("hpBar");
             // Register a callback for the GeometryChangedEvent
             _hpBar.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
