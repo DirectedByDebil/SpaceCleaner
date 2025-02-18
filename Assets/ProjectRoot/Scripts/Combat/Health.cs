@@ -30,6 +30,9 @@ namespace Combat
 
         public event Action<ICharacter> ShieldEnded;
 
+        public event Action<ICharacter> ShieldRestored;
+
+
 
         private readonly ICharacter _character;
 
@@ -59,7 +62,7 @@ namespace Combat
         public void SetStats(IHealthStats stats)
         {
 
-            _hasShield = stats.HasShield;
+            SetShield(stats.HasShield);
 
             Current = _maxHP;
         }
@@ -110,9 +113,26 @@ namespace Combat
         public void BreakShield()
         {
 
-            _hasShield = false;
+            SetShield(false);
+        }
 
-            ShieldEnded?.Invoke(_character);
+
+        private void SetShield(bool hasShield)
+        {
+
+            _hasShield = hasShield;
+
+
+            if (_hasShield)
+            {
+
+                ShieldRestored?.Invoke(_character);
+            }
+            else
+            {
+
+                ShieldEnded?.Invoke(_character);
+            }
         }
     }
 }

@@ -33,6 +33,8 @@ namespace Combat
 
                 health.ShieldEnded += OnShieldEnded;
 
+                health.ShieldRestored += OnShieldRestored;
+
                 health.Changed += OnHealthChanged;
 
                 health.Ended += OnHealthEnded;
@@ -50,6 +52,8 @@ namespace Combat
             {
 
                 health.ShieldEnded -= OnShieldEnded;
+
+                health.ShieldRestored -= OnShieldRestored;
 
                 health.Changed -= OnHealthChanged;
 
@@ -94,6 +98,13 @@ namespace Combat
         {
 
             character.HealthView.OnShieldEnded();
+        }
+
+
+        private void OnShieldRestored(ICharacter character)
+        {
+
+            character.HealthView.OnShieldRestored();
         }
 
 

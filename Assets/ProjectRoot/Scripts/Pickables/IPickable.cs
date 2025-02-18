@@ -1,11 +1,16 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 
 namespace Pickables
 {
     public interface IPickable
     {
 
-        public event Action<GameObject, PickableType> PickingUp;
+        public PickableType PickableType { get; }
+
+
+        public event Action<IPickable> PickingUp;
+
+
+        public void OnPickedUp();
     }
 }

@@ -24,5 +24,11 @@ namespace Combat
         {
 
         }
+
+
+        public void OnShieldRestored()
+        {
+
+        }
     }
 }

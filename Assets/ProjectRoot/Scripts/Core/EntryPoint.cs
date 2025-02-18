@@ -3,6 +3,7 @@ using Combat;
 using Combat.Guns;
 using Effects;
 using Movement;
+using Pickables;
 using UnityEngine;
 
 namespace Core
@@ -36,6 +37,10 @@ namespace Core
         [SerializeField, HideInInspector, Range(0, 1),
             Header("Send player position to enemies interval"), Space]
         private float _checkPositionTime;
+
+
+        [SerializeField, HideInInspector, Space]
+        private TrapHandler _traps;
 
         #endregion
 
@@ -85,9 +90,14 @@ namespace Core
 
         private GameProgress _gameProgress;
 
+        private GameAnalytics _gameAnalytics;
+
 
         [SerializeField, HideInInspector, Space]
-        private TrapHandler _traps;
+        private GameAnalyticsCosts _gameAnalyticsCosts;
+
+        [SerializeField, HideInInspector, Space]
+        private PickableHandler _pickables;
 
         #endregion
 
@@ -118,10 +128,12 @@ namespace Core
             _enemySystem = new EnemySystem(_enemies, _spawnPositionPool);
 
 
+            _cameraEffects = new CameraEffects(Camera.main);
+
+
             _gameProgress = new GameProgress(_enemySystem);
 
-
-            _cameraEffects = new CameraEffects(Camera.main);
+            _gameAnalytics = new GameAnalytics(_gameAnalyticsCosts);
         }
 
 
@@ -147,7 +159,14 @@ namespace Core
 
             _gameProgress.SetTraps(_traps.Traps);
 
+            _gameProgress.SetPickables(_pickables.Pickables);
+
             _gameProgress.SetSystem();
+
+
+            _gameProgress.EnemyEnded += _gameAnalytics.OnEnemyEnded;
+
+            _gameProgress.PickingGarbage += _gameAnalytics.OnPickingGarbage;
         }
 
 
@@ -173,7 +192,14 @@ namespace Core
 
             _gameProgress.UnsetTraps(_traps.Traps);
 
+            _gameProgress.UnsetPickables(_pickables.Pickables);
+
             _gameProgress.UnsetSystem();
+
+
+            _gameProgress.EnemyEnded -= _gameAnalytics.OnEnemyEnded;
+
+            _gameProgress.PickingGarbage -= _gameAnalytics.OnPickingGarbage;
         }
 
 

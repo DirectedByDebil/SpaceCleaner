@@ -8,5 +8,7 @@
         public void OnHealthEnded();
 
         public void OnShieldEnded();
+
+        public void OnShieldRestored();
     }
 }

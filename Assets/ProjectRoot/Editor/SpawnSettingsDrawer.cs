@@ -77,9 +77,7 @@ namespace Core
 
             SerializedProperty property = _spawnSettings.FindPropertyRelative(propertyName);
 
-            EditorGUILayout.LabelField(propertyName);
-
-            property.floatValue = EditorGUILayout.Slider(property.floatValue, 0f, 60f);
+            EditorGUILayout.Slider(property, 0f, 60f, propertyName);
         }
     }
 }

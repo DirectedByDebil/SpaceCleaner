@@ -51,17 +51,28 @@ namespace Core
         
         private SerializedProperty _spawnPositionPool;
         
+        private SpawnSettingsDrawer _spawnSettingsDrawer = new ();
+
         #endregion
 
 
         #region Camera
 
         private SerializedProperty _cameraSmoothTime;
-       
+
         #endregion
 
 
-        private SpawnSettingsDrawer _spawnSettingsDrawer = new ();
+        #region Game Analytics
+
+        private SerializedProperty _gameAnalyticsCosts;
+
+        private SerializedProperty _pickables;
+
+        private GameAnalyticsCostsDrawer _costsDrawer = new();
+
+        #endregion
+
 
 
         public override void OnInspectorGUI()
@@ -115,6 +126,11 @@ namespace Core
 
 
             _cameraSmoothTime = serializedObject.FindProperty("_cameraSmoothTime");
+
+
+            _gameAnalyticsCosts = serializedObject.FindProperty("_gameAnalyticsCosts");
+
+            _pickables = serializedObject.FindProperty("_pickables");
         }
 
 
@@ -177,6 +193,9 @@ namespace Core
 
                 case DisplayCategory.Pickables:
 
+                    _costsDrawer.DrawCosts(_gameAnalyticsCosts);
+                    
+                    DrawProperties(_pickables);
                     break;
             }
         }

@@ -2,6 +2,7 @@
 using Combat;
 using Pickables;
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -9,9 +10,12 @@ namespace Core
     public sealed class GameProgress
     {
 
-        private readonly Dictionary<GameObject, ICharacter> _characters;
+        public event Action<IEnemy> EnemyEnded;
 
-        private readonly Dictionary<GameObject, IPickable> _pickables;
+        public event Action<IGarbage> PickingGarbage;
+
+
+        private readonly Dictionary<GameObject, ICharacter> _characters;
 
 
         private readonly CombatSystem _combatSystem;
@@ -23,8 +27,6 @@ namespace Core
         {
 
             _characters = new Dictionary<GameObject, ICharacter>();
-
-            _pickables = new Dictionary<GameObject, IPickable>();
 
 
             _combatSystem = new CombatSystem();
@@ -107,7 +109,7 @@ namespace Core
         #endregion
 
 
-        #region void Set/Unset Enemies
+        #region Set/Unset Enemies
 
         public void SetEnemies(IReadOnlyCollection<Enemy> enemies)
         {
@@ -147,6 +149,32 @@ namespace Core
 
 
                 _enemySystem.RemoveEnemy(enemy);
+            }
+        }
+
+        #endregion
+
+
+        #region Set/Unset Pickables
+        
+        public void SetPickables(IEnumerable<IPickable> pickables)
+        {
+
+            foreach(IPickable pickable in pickables)
+            {
+
+                pickable.PickingUp += OnPickingUp;
+            }
+        }
+
+
+        public void UnsetPickables(IEnumerable<IPickable> pickables)
+        {
+
+            foreach (IPickable pickable in pickables)
+            {
+
+                pickable.PickingUp -= OnPickingUp;
             }
         }
 
@@ -211,11 +239,33 @@ namespace Core
 
                 _enemySystem.RemoveEnemy(enemy);
 
+                EnemyEnded?.Invoke(enemy);
+
             }
             else if (character is IPlayer player)
             {
 
                 GUIOutput.AddOutput("Game over", "(((((");
+            }
+        }
+
+
+        private void OnPickingUp(IPickable pickable)
+        {
+
+            switch (pickable.PickableType)
+            {
+
+                case PickableType.Garbage:
+
+                    PickingGarbage?.Invoke(pickable as IGarbage);
+                    break;
+                
+                case PickableType.Gun:
+                    break;
+                
+                case PickableType.Bonus:
+                    break;
             }
         }
 
