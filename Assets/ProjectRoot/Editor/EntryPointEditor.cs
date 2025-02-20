@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 
 namespace Core
 {
@@ -74,6 +73,13 @@ namespace Core
         #endregion
 
 
+        #region Levels
+
+        private SerializedProperty _levelFinish;
+
+        #endregion
+
+
 
         public override void OnInspectorGUI()
         {
@@ -131,6 +137,9 @@ namespace Core
             _gameAnalyticsCosts = serializedObject.FindProperty("_gameAnalyticsCosts");
 
             _pickables = serializedObject.FindProperty("_pickables");
+
+
+            _levelFinish = serializedObject.FindProperty("_levelFinish");
         }
 
 
@@ -193,9 +202,19 @@ namespace Core
 
                 case DisplayCategory.Pickables:
 
-                    _costsDrawer.DrawCosts(_gameAnalyticsCosts);
-                    
                     DrawProperties(_pickables);
+                    break;
+
+
+                case DisplayCategory.GameAnalytics:
+                    
+                    _costsDrawer.DrawCosts(_gameAnalyticsCosts);
+                    break;
+
+
+                case DisplayCategory.Levels:
+
+                    DrawProperties(_levelFinish);
                     break;
             }
         }

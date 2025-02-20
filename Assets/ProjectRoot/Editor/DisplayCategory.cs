@@ -13,6 +13,10 @@
 
         Camera,
 
-        Pickables
+        Pickables,
+
+        GameAnalytics,
+
+        Levels
     }
 }

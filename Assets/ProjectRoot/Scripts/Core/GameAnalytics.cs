@@ -11,8 +11,8 @@ namespace Core
         
         public event Action<int> EnemyPointsChanged;
 
-        public event Action GameWon;
-
+        public event Action GoalAchieved;
+        
 
         private readonly GameAnalyticsCosts _costs;
 
@@ -61,7 +61,7 @@ namespace Core
             if(_garbagePoints >= _costs.GarbagePointsToWin)
             {
                 GUIOutput.AddOutput("Game Won",  "Garbage Points");
-                GameWon?.Invoke();
+                GoalAchieved?.Invoke();
             }
         }
 
@@ -78,7 +78,7 @@ namespace Core
             {
 
                 GUIOutput.AddOutput("Game Won", "Enemy Points");
-                GameWon?.Invoke();
+                GoalAchieved?.Invoke();
             }
         }
     }

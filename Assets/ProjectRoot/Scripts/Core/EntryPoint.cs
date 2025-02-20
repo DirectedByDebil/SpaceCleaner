@@ -2,6 +2,7 @@ using Characters;
 using Combat;
 using Combat.Guns;
 using Effects;
+using Levels;
 using Movement;
 using Pickables;
 using UnityEngine;
@@ -96,9 +97,22 @@ namespace Core
         [SerializeField, HideInInspector, Space]
         private GameAnalyticsCosts _gameAnalyticsCosts;
 
+        #endregion
+
+
+        #region Game Levels
+
+        [SerializeField, HideInInspector, Space]
+        private LevelFinish _levelFinish;
+
+        #endregion
+
+
+        #region Pickables
+
         [SerializeField, HideInInspector, Space]
         private PickableHandler _pickables;
-
+        
         #endregion
 
 
@@ -110,6 +124,7 @@ namespace Core
         private float _cameraSmoothTime;
 
         #endregion
+
 
 
         private void Awake()
@@ -131,7 +146,7 @@ namespace Core
             _cameraEffects = new CameraEffects(Camera.main);
 
 
-            _gameProgress = new GameProgress(_enemySystem);
+            _gameProgress = new GameProgress(_enemySystem, _levelFinish);
 
             _gameAnalytics = new GameAnalytics(_gameAnalyticsCosts);
         }
@@ -161,12 +176,17 @@ namespace Core
 
             _gameProgress.SetPickables(_pickables.Pickables);
 
+            _gameProgress.SetLevelFinish(_levelFinish);
+
             _gameProgress.SetSystem();
 
 
             _gameProgress.EnemyEnded += _gameAnalytics.OnEnemyEnded;
 
             _gameProgress.PickingGarbage += _gameAnalytics.OnPickingGarbage;
+
+
+            _gameAnalytics.GoalAchieved += _gameProgress.OnGoalAchieved;
         }
 
 
@@ -194,12 +214,17 @@ namespace Core
 
             _gameProgress.UnsetPickables(_pickables.Pickables);
 
+            _gameProgress.UnsetLevelFinish(_levelFinish);
+
             _gameProgress.UnsetSystem();
 
 
             _gameProgress.EnemyEnded -= _gameAnalytics.OnEnemyEnded;
 
             _gameProgress.PickingGarbage -= _gameAnalytics.OnPickingGarbage;
+
+
+            _gameAnalytics.GoalAchieved -= _gameProgress.OnGoalAchieved;
         }
 
 

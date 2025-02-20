@@ -1,6 +1,7 @@
 ﻿using Characters;
 using Combat;
 using Pickables;
+using Levels;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,10 @@ namespace Core
 
         private readonly EnemySystem _enemySystem;
 
+        private readonly ILevelFinish _levelFinish;
 
-        public GameProgress(EnemySystem enemySystem)
+
+        public GameProgress(EnemySystem enemySystem, ILevelFinish levelFinish)
         {
 
             _characters = new Dictionary<GameObject, ICharacter>();
@@ -32,6 +35,9 @@ namespace Core
             _combatSystem = new CombatSystem();
 
             _enemySystem = enemySystem;
+
+
+            _levelFinish = levelFinish;
         }
 
 
@@ -181,6 +187,24 @@ namespace Core
         #endregion
 
 
+        #region Set/Unset Level Finish
+        
+        public void SetLevelFinish(ILevelFinish levelFinish)
+        {
+
+            levelFinish.Finishing += OnFinishing;
+        }
+
+
+        public void UnsetLevelFinish(ILevelFinish levelFinish)
+        {
+
+            levelFinish.Finishing -= OnFinishing;
+        }
+
+        #endregion
+
+
         #region Set/Unset System
 
         public void SetSystem()
@@ -207,6 +231,13 @@ namespace Core
         }
 
         #endregion
+
+
+        public void OnGoalAchieved()
+        {
+
+            _levelFinish.Unlock();
+        }
 
 
         private void OnTrapStepping(GameObject obj)
@@ -267,6 +298,13 @@ namespace Core
                 case PickableType.Bonus:
                     break;
             }
+        }
+
+
+        private void OnFinishing()
+        {
+
+            GUIOutput.AddOutput("Level", "Finishing");
         }
 
 
