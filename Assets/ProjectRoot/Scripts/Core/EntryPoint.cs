@@ -21,6 +21,7 @@ namespace Core
         [SerializeField, HideInInspector, Space]
         private bool _isInputRaw;
 
+
         private PlayerSystem _playerSystem;
 
         #endregion
@@ -97,6 +98,9 @@ namespace Core
         [SerializeField, HideInInspector, Space]
         private GameAnalyticsCosts _gameAnalyticsCosts;
 
+
+        private bool _isGameRunning;
+
         #endregion
 
 
@@ -149,6 +153,9 @@ namespace Core
             _gameProgress = new GameProgress(_enemySystem, _levelFinish);
 
             _gameAnalytics = new GameAnalytics(_gameAnalyticsCosts);
+
+
+            _isGameRunning = true;
         }
 
 
@@ -184,6 +191,8 @@ namespace Core
             _gameProgress.EnemyEnded += _gameAnalytics.OnEnemyEnded;
 
             _gameProgress.PickingGarbage += _gameAnalytics.OnPickingGarbage;
+
+            _gameProgress.GameOver += OnGameOver;
 
 
             _gameAnalytics.GoalAchieved += _gameProgress.OnGoalAchieved;
@@ -223,6 +232,8 @@ namespace Core
 
             _gameProgress.PickingGarbage -= _gameAnalytics.OnPickingGarbage;
 
+            _gameProgress.GameOver -= OnGameOver;
+
 
             _gameAnalytics.GoalAchieved -= _gameProgress.OnGoalAchieved;
         }
@@ -230,7 +241,9 @@ namespace Core
 
         private void FixedUpdate()
         {
-            
+
+            if (!_isGameRunning) return;
+
             _playerSystem.HandleInput(_isInputRaw);
 
 
@@ -248,6 +261,13 @@ namespace Core
 
             _cameraEffects.Follow(_player.transform.position,
                 _cameraSmoothTime);
+        }
+
+
+        private void OnGameOver()
+        {
+
+            _isGameRunning = false;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Movement
             if(TryGetAgent(enemy, out AgentMovement agent))
             {
 
-                _control.Pressed += agent.MakeMovement;
+                _control.Pressed += agent.SetDestination;
 
                 _activeAgents.Add(agent);
             }
@@ -58,7 +58,7 @@ namespace Movement
             if(TryGetAgent(enemy, out AgentMovement agent))
             {
 
-                _control.Pressed -= agent.MakeMovement;
+                _control.Pressed -= agent.SetDestination;
 
                 _activeAgents.Remove(agent);
             }

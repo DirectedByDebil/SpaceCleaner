@@ -1,6 +1,5 @@
 ﻿using Characters;
 using Movement;
-using Combat;
 
 namespace Core
 {
@@ -9,7 +8,7 @@ namespace Core
 
         private readonly PlayerMovementControl _movementControl;
 
-        private readonly PhysicsMovement _movementModel;
+        private readonly PlayerMovement _movement;
 
 
         public PlayerSystem(IPlayer player)
@@ -17,8 +16,7 @@ namespace Core
 
             _movementControl = new PlayerMovementControl();
 
-            _movementModel = new PhysicsMovement(
-                player.MovementStats, player.Rigidbody);
+            _movement = new PlayerMovement(player);
         }
 
 
@@ -27,14 +25,14 @@ namespace Core
         public void SetSystem()
         {
 
-            _movementControl.Pressed += _movementModel.MakeMovement;
+            _movementControl.Pressed += _movement.MakeMovement;
         }
 
 
         public void UnsetSystem()
         {
 
-            _movementControl.Pressed -= _movementModel.MakeMovement;
+            _movementControl.Pressed -= _movement.MakeMovement;
         }
 
         #endregion

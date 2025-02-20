@@ -11,6 +11,8 @@ namespace Core
     public sealed class GameProgress
     {
 
+        public event Action GameOver;
+
         public event Action<IEnemy> EnemyEnded;
 
         public event Action<IGarbage> PickingGarbage;
@@ -276,6 +278,7 @@ namespace Core
             else if (character is IPlayer player)
             {
 
+                GameOver?.Invoke();
                 GUIOutput.AddOutput("Game over", "(((((");
             }
         }
