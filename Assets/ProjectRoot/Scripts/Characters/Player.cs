@@ -43,6 +43,9 @@ namespace Characters
 
         public override IHealthView HealthView { get => _healthView; }
 
+        public IPlayerUI UI { get => _healthView; }
+
+
 
         [SerializeField, Space]
         private PlayerHealthView _healthView;

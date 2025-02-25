@@ -5,6 +5,7 @@ using Effects;
 using Levels;
 using Movement;
 using Pickables;
+using Pickables.Bonuses;
 using UnityEngine;
 
 namespace Core
@@ -116,7 +117,9 @@ namespace Core
 
         [SerializeField, HideInInspector, Space]
         private PickableHandler _pickables;
-        
+
+        private BonusSystem _bonusSystem;
+
         #endregion
 
 
@@ -153,6 +156,9 @@ namespace Core
             _gameProgress = new GameProgress(_enemySystem, _levelFinish);
 
             _gameAnalytics = new GameAnalytics(_gameAnalyticsCosts);
+
+
+            _bonusSystem = new BonusSystem();
 
 
             _isGameRunning = true;
@@ -192,10 +198,17 @@ namespace Core
 
             _gameProgress.PickingGarbage += _gameAnalytics.OnPickingGarbage;
 
+            _gameProgress.PickingBonus += _bonusSystem.OnPickingBonus;
+
             _gameProgress.GameOver += OnGameOver;
 
 
             _gameAnalytics.GoalAchieved += _gameProgress.OnGoalAchieved;
+
+
+            _bonusSystem.PickingHealth += _gameProgress.OnPickingHealth;
+
+            _bonusSystem.PickingShield += _gameProgress.OnPickingShield;
         }
 
 
@@ -232,10 +245,17 @@ namespace Core
 
             _gameProgress.PickingGarbage -= _gameAnalytics.OnPickingGarbage;
 
+            _gameProgress.PickingBonus -= _bonusSystem.OnPickingBonus;
+
             _gameProgress.GameOver -= OnGameOver;
 
 
             _gameAnalytics.GoalAchieved -= _gameProgress.OnGoalAchieved;
+
+
+            _bonusSystem.PickingHealth -= _gameProgress.OnPickingHealth;
+
+            _bonusSystem.PickingShield -= _gameProgress.OnPickingShield;
         }
 
 

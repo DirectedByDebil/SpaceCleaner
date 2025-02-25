@@ -1,6 +1,7 @@
 ﻿using Characters;
 using Combat;
 using Pickables;
+using Pickables.Bonuses;
 using Levels;
 using UnityEngine;
 using System;
@@ -17,6 +18,8 @@ namespace Core
 
         public event Action<IGarbage> PickingGarbage;
 
+        public event Action<IBonus> PickingBonus;
+
 
         private readonly Dictionary<GameObject, ICharacter> _characters;
 
@@ -26,6 +29,9 @@ namespace Core
         private readonly EnemySystem _enemySystem;
 
         private readonly ILevelFinish _levelFinish;
+
+
+        private IPlayer _player;
 
 
         public GameProgress(EnemySystem enemySystem, ILevelFinish levelFinish)
@@ -47,6 +53,9 @@ namespace Core
         
         public void SetPlayer(Player player)
         {
+
+            _player = player;
+
 
             _characters.Add(player.gameObject, player);
 
@@ -242,6 +251,26 @@ namespace Core
         }
 
 
+        #region Bonus Events Handlers
+
+        public void OnPickingHealth(int increaseValue)
+        {
+
+            _combatSystem.AddHealth(_player, increaseValue);
+        }
+
+
+        public void OnPickingShield(float duration)
+        {
+
+            _combatSystem.AddShieldAsync(_player, duration);
+        }
+
+        #endregion
+
+
+        #region Combat Event Handlers
+
         private void OnTrapStepping(GameObject obj)
         {
 
@@ -282,6 +311,8 @@ namespace Core
                 GUIOutput.AddOutput("Game over", "(((((");
             }
         }
+        
+        #endregion
 
 
         private void OnPickingUp(IPickable pickable)
@@ -299,6 +330,8 @@ namespace Core
                     break;
                 
                 case PickableType.Bonus:
+
+                    PickingBonus?.Invoke(pickable as IBonus);
                     break;
             }
         }

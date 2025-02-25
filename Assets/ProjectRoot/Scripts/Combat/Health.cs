@@ -23,6 +23,8 @@ namespace Combat
             }
         }
 
+        public bool HasShield { get => _hasShield; }
+
 
         public event Action<ICharacter> Ended;
 
@@ -106,8 +108,17 @@ namespace Combat
 
             Current = newHp;
         }
-        
+
         #endregion
+
+
+        #region Add/Break Shield
+
+        public void AddShield()
+        {
+
+            SetShield(true);
+        }
 
 
         public void BreakShield()
@@ -134,5 +145,7 @@ namespace Combat
                 ShieldEnded?.Invoke(_character);
             }
         }
+        
+        #endregion
     }
 }

@@ -219,7 +219,7 @@ namespace Core
             }
         }
 
-
+        //#TODO make editor extensions
         private void DrawProperties(params SerializedProperty[] properties)
         {
 

@@ -1,6 +1,10 @@
 ﻿using Characters;
+using Pickables.Bonuses;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace Combat
 {
@@ -67,6 +71,13 @@ namespace Combat
         #endregion
 
 
+        public void AddHealth(ICharacter character, int increaseValue)
+        {
+
+            _healths[character].Heal(increaseValue);
+        }
+
+
         public void RestoreCharacter(ICharacter character)
         {
 
@@ -87,6 +98,36 @@ namespace Combat
         {
 
             Health health = _healths[character];
+
+            health.BreakShield();
+        }
+
+
+        //#TODO replace it to somewhere else
+        //#BUG: if shield took twice time counts wrong
+        public async void AddShieldAsync(IPlayer player, float duration)
+        {
+
+            Health health = _healths[player];
+
+            health.AddShield();
+
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+
+                if (!health.HasShield) return;
+
+
+                elapsedTime += Time.deltaTime;
+
+                player.UI.OnShieldWorking(elapsedTime / duration);
+
+                await Task.Yield();
+            }
+
 
             health.BreakShield();
         }
