@@ -14,7 +14,7 @@ namespace Core
         private static Rect _rect;
 
 
-        private readonly Vector2 Position = new (20, 20);
+        private readonly Vector2 Position = new (20, 40);
 
 
         private void Awake()

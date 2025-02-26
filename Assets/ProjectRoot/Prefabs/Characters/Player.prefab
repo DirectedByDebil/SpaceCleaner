@@ -245,11 +245,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5aa83315acf1a444da93384178325cbe,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7549158383741900964}
+      addedObject: {fileID: 6879779163102005823}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5aa83315acf1a444da93384178325cbe,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6879779163102005823}
+      addedObject: {fileID: 8053494718528162049}
   m_SourcePrefab: {fileID: 100100000, guid: 5aa83315acf1a444da93384178325cbe, type: 3}
 --- !u!4 &3905388107523635460 stripped
 Transform:
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthStats: {fileID: 11400000, guid: 4617e22659312314cb7299c564d15c6f, type: 2}
   _movementStats: {fileID: 11400000, guid: fd3d8f19cfff66843b652843d2bee012, type: 2}
-  _healthView: {fileID: 7549158383741900964}
+  _playerUI: {fileID: 8053494718528162049}
 --- !u!65 &7183720186396840924
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -326,19 +326,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 0.93, z: 3}
   m_Center: {x: 0, y: 0.43, z: 0}
---- !u!114 &7549158383741900964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4429687596650292158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4498f257b3a87fb4996c1b0351b14434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shield: {fileID: 1795907435538228179}
 --- !u!195 &6879779163102005823
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -361,6 +348,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8053494718528162049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4429687596650292158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60c9db893882ae42862e3a50b07bc35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 0}
+  _shield: {fileID: 1795907435538228179}
 --- !u!1001 &5874397386427871863
 PrefabInstance:
   m_ObjectHideFlags: 0

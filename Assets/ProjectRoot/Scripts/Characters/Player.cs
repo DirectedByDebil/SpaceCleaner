@@ -1,4 +1,5 @@
 ﻿using Combat;
+using Combat.Views;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -41,14 +42,14 @@ namespace Characters
         }
 
 
-        public override IHealthView HealthView { get => _healthView; }
+        public override IHealthView HealthView { get => _playerUI; }
 
-        public IPlayerUI UI { get => _healthView; }
+        public IPlayerUI UI { get => _playerUI; }
 
 
 
         [SerializeField, Space]
-        private PlayerHealthView _healthView;
+        private PlayerUI _playerUI;
 
 
         private Rigidbody _rigidbody;
