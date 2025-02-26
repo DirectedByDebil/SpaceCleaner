@@ -1,11 +1,11 @@
 ﻿using Combat;
-using UnityEngine.AI;
+using Movement;
 
 namespace Characters
 {
-    public interface IEnemy: ICharacter, IDamager
+    public interface IEnemy: ICharacter, IDamager, IAgent
     {
 
-        public NavMeshAgent NavMeshAgent { get; }
+        public EnemyDifficulty EnemyDifficulty { get; }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using Characters;
 using Combat;
 using Pickables;
+using Pickables.Bonuses;
+using Levels;
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -9,30 +12,40 @@ namespace Core
     public sealed class GameProgress
     {
 
-        private readonly Dictionary<GameObject, ICharacter> _characters;
+        public event Action GameOver;
 
-        private readonly Dictionary<GameObject, IPickable> _pickables;
+        public event Action<IEnemy> EnemyEnded;
+
+        public event Action<IGarbage> PickingGarbage;
+
+        public event Action<IBonus> PickingBonus;
+
+
+        private readonly Dictionary<GameObject, ICharacter> _characters;
 
 
         private readonly CombatSystem _combatSystem;
 
-        private readonly EnemiesSystem _enemiesSystem;
+        private readonly EnemySystem _enemySystem;
+
+        private readonly ILevelFinish _levelFinish;
 
 
-        //Spawn system
+        private IPlayer _player;
 
 
-        public GameProgress(EnemiesSystem enemiesSystem)
+        public GameProgress(EnemySystem enemySystem, ILevelFinish levelFinish)
         {
 
             _characters = new Dictionary<GameObject, ICharacter>();
 
-            _pickables = new Dictionary<GameObject, IPickable>();
-
 
             _combatSystem = new CombatSystem();
 
-            _enemiesSystem = enemiesSystem;
+            _enemySystem = enemySystem;
+
+
+            _levelFinish = levelFinish;
         }
 
 
@@ -40,6 +53,9 @@ namespace Core
         
         public void SetPlayer(Player player)
         {
+
+            _player = player;
+
 
             _characters.Add(player.gameObject, player);
 
@@ -110,7 +126,7 @@ namespace Core
         #endregion
 
 
-        #region void Set/Unset Enemies
+        #region Set/Unset Enemies
 
         public void SetEnemies(IReadOnlyCollection<Enemy> enemies)
         {
@@ -126,11 +142,10 @@ namespace Core
                 _combatSystem.AddCharacter(enemy);
 
 
-                //#TODO remove this
                 if(enemy.gameObject.activeInHierarchy)
                 {
 
-                    _enemiesSystem.AddEnemy(enemy);
+                    _enemySystem.AddEnemy(enemy);
                 }
             }
         }
@@ -150,8 +165,52 @@ namespace Core
                 _characters.Remove(enemy.gameObject);
 
 
-                _enemiesSystem.RemoveEnemy(enemy);
+                _enemySystem.RemoveEnemy(enemy);
             }
+        }
+
+        #endregion
+
+
+        #region Set/Unset Pickables
+        
+        public void SetPickables(IEnumerable<IPickable> pickables)
+        {
+
+            foreach(IPickable pickable in pickables)
+            {
+
+                pickable.PickingUp += OnPickingUp;
+            }
+        }
+
+
+        public void UnsetPickables(IEnumerable<IPickable> pickables)
+        {
+
+            foreach (IPickable pickable in pickables)
+            {
+
+                pickable.PickingUp -= OnPickingUp;
+            }
+        }
+
+        #endregion
+
+
+        #region Set/Unset Level Finish
+        
+        public void SetLevelFinish(ILevelFinish levelFinish)
+        {
+
+            levelFinish.Finishing += OnFinishing;
+        }
+
+
+        public void UnsetLevelFinish(ILevelFinish levelFinish)
+        {
+
+            levelFinish.Finishing -= OnFinishing;
         }
 
         #endregion
@@ -162,6 +221,11 @@ namespace Core
         public void SetSystem()
         {
 
+            _enemySystem.SetSystem();
+
+            _enemySystem.EnemyAdded += _combatSystem.RestoreCharacter;
+
+
             _combatSystem.OnEnded += OnEnded;
         }
 
@@ -169,11 +233,43 @@ namespace Core
         public void UnsetSystem()
         {
 
+            _enemySystem.UnsetSystem();
+
+            _enemySystem.EnemyAdded -= _combatSystem.RestoreCharacter;
+
+
             _combatSystem.OnEnded -= OnEnded;
         }
 
         #endregion
 
+
+        public void OnGoalAchieved()
+        {
+
+            _levelFinish.Unlock();
+        }
+
+
+        #region Bonus Events Handlers
+
+        public void OnPickingHealth(int increaseValue)
+        {
+
+            _combatSystem.AddHealth(_player, increaseValue);
+        }
+
+
+        public void OnPickingShield(float duration)
+        {
+
+            _combatSystem.AddShieldAsync(_player, duration);
+        }
+
+        #endregion
+
+
+        #region Combat Event Handlers
 
         private void OnTrapStepping(GameObject obj)
         {
@@ -203,14 +299,48 @@ namespace Core
             if(character is IEnemy enemy)
             {
 
-                _enemiesSystem.RemoveEnemy(enemy);
+                _enemySystem.RemoveEnemy(enemy);
+
+                EnemyEnded?.Invoke(enemy);
 
             }
             else if (character is IPlayer player)
             {
 
+                GameOver?.Invoke();
                 GUIOutput.AddOutput("Game over", "(((((");
             }
+        }
+        
+        #endregion
+
+
+        private void OnPickingUp(IPickable pickable)
+        {
+
+            switch (pickable.PickableType)
+            {
+
+                case PickableType.Garbage:
+
+                    PickingGarbage?.Invoke(pickable as IGarbage);
+                    break;
+                
+                case PickableType.Gun:
+                    break;
+                
+                case PickableType.Bonus:
+
+                    PickingBonus?.Invoke(pickable as IBonus);
+                    break;
+            }
+        }
+
+
+        private void OnFinishing()
+        {
+
+            GUIOutput.AddOutput("Level", "Finishing");
         }
 
 

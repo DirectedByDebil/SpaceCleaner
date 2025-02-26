@@ -3,12 +3,11 @@ using Movement;
 
 namespace Characters
 {
-    public interface ICharacter
+    public interface ICharacter : IMoveable
     {
 
         public IHealthStats HealthStats { get; }
 
-        public IMovementStats MovementStats { get; }
 
         public IHealthView HealthView { get; }
     }

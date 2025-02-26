@@ -23,12 +23,17 @@ namespace Combat
             }
         }
 
+        public bool HasShield { get => _hasShield; }
+
 
         public event Action<ICharacter> Ended;
 
         public event Action<ICharacter, int> Changed;
 
         public event Action<ICharacter> ShieldEnded;
+
+        public event Action<ICharacter> ShieldRestored;
+
 
 
         private readonly ICharacter _character;
@@ -51,10 +56,17 @@ namespace Combat
 
             _maxHP = stats.MaxHp;
             
-            _hasShield = stats.HasShield;
+
+            SetStats(stats);
+        }
 
 
-            _hp = _maxHP;
+        public void SetStats(IHealthStats stats)
+        {
+
+            SetShield(stats.HasShield);
+
+            Current = _maxHP;
         }
 
 
@@ -96,16 +108,44 @@ namespace Combat
 
             Current = newHp;
         }
-        
+
         #endregion
+
+
+        #region Add/Break Shield
+
+        public void AddShield()
+        {
+
+            SetShield(true);
+        }
 
 
         public void BreakShield()
         {
 
-            _hasShield = false;
-
-            ShieldEnded?.Invoke(_character);
+            SetShield(false);
         }
+
+
+        private void SetShield(bool hasShield)
+        {
+
+            _hasShield = hasShield;
+
+
+            if (_hasShield)
+            {
+
+                ShieldRestored?.Invoke(_character);
+            }
+            else
+            {
+
+                ShieldEnded?.Invoke(_character);
+            }
+        }
+        
+        #endregion
     }
 }

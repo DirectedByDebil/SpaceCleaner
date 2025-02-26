@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/ProjectRoot/Scripts/Views/PlayerHealthView.cs.meta
+guid: 036202a0d1930ac48a8c6a60789bd3d1
+========
+guid: eab3cdf1d69584e47bd5fccfb2f48e3f
+>>>>>>>> d02cdb0d4bd0dc7529249237a24db0de9ee1f1b3:Assets/ProjectRoot/Scripts/Combat/Trap.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

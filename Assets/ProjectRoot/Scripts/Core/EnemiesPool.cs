@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public sealed class EnemiesPool : MonoBehaviour, IPool<IEnemy>
+    public sealed class EnemiesPool : MonoBehaviour, IEnemyPool
     {
 
         public IReadOnlyCollection<Enemy> AllEnemies
@@ -23,6 +23,9 @@ namespace Core
 
         [SerializeField, Space]
         private List<Enemy> _activeEnemies;
+
+
+        private EnemyDifficulty _enemyDifficulty;
 
 
         private void OnValidate()
@@ -59,7 +62,9 @@ namespace Core
         }
 
 
-        public bool TryGetObject(out IEnemy enemy)
+        #region Try Get Enemy
+
+        public bool TryGetObject(out Enemy enemy)
         {
 
             enemy = _allEnemies.Find(IsAvailable);
@@ -68,10 +73,35 @@ namespace Core
         }
 
 
+        public bool TryGetEnemy(EnemyDifficulty difficulty, out Enemy enemy)
+        {
+
+            _enemyDifficulty = difficulty;
+
+            enemy = _allEnemies.Find(IsAvailableDifficulty);
+
+            return enemy != null;
+        }
+
+        #endregion
+
+
+        #region Is Available
+
         private bool IsAvailable(Enemy enemy)
         {
 
             return !enemy.gameObject.activeInHierarchy;
         }
+
+
+        private bool IsAvailableDifficulty(Enemy enemy)
+        {
+
+            return enemy.EnemyDifficulty == _enemyDifficulty &&
+                !enemy.gameObject.activeInHierarchy;
+        }
+        
+        #endregion
     }
 }

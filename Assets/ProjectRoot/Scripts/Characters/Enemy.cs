@@ -9,6 +9,10 @@ namespace Characters
     public sealed class Enemy : Character, IEnemy
     {
 
+
+        public event Action<GameObject, int> Damaging;
+        
+        
         public NavMeshAgent NavMeshAgent
         {
 
@@ -28,7 +32,9 @@ namespace Characters
         public override IHealthView HealthView { get => _healthView; }
 
 
-        public event Action<GameObject, int> Damaging;
+
+        [field: SerializeField, Space]
+        public EnemyDifficulty EnemyDifficulty { get; private set; }
 
 
 
@@ -45,7 +51,7 @@ namespace Characters
 
         private void OnCollisionEnter(Collision collision)
         {
-            
+ 
             GameObject obj = collision.gameObject;
 
 

@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿using Movement;
 
 namespace Characters
 {
-    public interface IPlayer: ICharacter
+    public interface IPlayer: ICharacter, IPhysical, IAgent
     {
 
-        public Rigidbody Rigidbody { get; }
+        public IPlayerUI UI { get; }
     }
 }

@@ -1,6 +1,11 @@
 using Characters;
+using Combat;
 using Combat.Guns;
+using Effects;
+using Levels;
 using Movement;
+using Pickables;
+using Pickables.Bonuses;
 using UnityEngine;
 
 namespace Core
@@ -11,11 +16,12 @@ namespace Core
 
         #region Player
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private Player _player;
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private bool _isInputRaw;
+
 
         private PlayerSystem _playerSystem;
 
@@ -23,17 +29,33 @@ namespace Core
 
 
         #region Enemies
+        
+        private EnemySystem _enemySystem;
 
-        [SerializeField, Space]
+
+        [SerializeField, HideInInspector, Space]
         private EnemiesPool _enemies;
 
-        private EnemiesSystem _enemiesSystem;
 
-
-        [SerializeField, Range(0, 1),
+        [SerializeField, HideInInspector, Range(0, 1),
             Header("Send player position to enemies interval"), Space]
         private float _checkPositionTime;
 
+
+        [SerializeField, HideInInspector, Space]
+        private TrapHandler _traps;
+
+        #endregion
+
+
+        #region Enemies Spawn
+
+        [SerializeField, HideInInspector, Space]
+        private SpawnSettings _spawnSettings;
+
+
+        [SerializeField, HideInInspector, Space]
+        private PositionPool _spawnPositionPool;
         #endregion
 
 
@@ -42,7 +64,7 @@ namespace Core
         private ShootingSystem _shootingSystem;
 
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private Gun _gun;
 
         #endregion
@@ -50,15 +72,15 @@ namespace Core
 
         #region Bullets System
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private BulletPool _bulletPool;
 
 
-        [SerializeField, Space]
+        [SerializeField, HideInInspector, Space]
         private MovementStats _bulletMovementStats;
 
 
-        [SerializeField, Range(1, 3), Space]
+        [SerializeField, HideInInspector, Range(1, 3), Space]
         private float _bulletLifeTime;
 
 
@@ -71,7 +93,45 @@ namespace Core
 
         private GameProgress _gameProgress;
 
+        private GameAnalytics _gameAnalytics;
+
+
+        [SerializeField, HideInInspector, Space]
+        private GameAnalyticsCosts _gameAnalyticsCosts;
+
+
+        private bool _isGameRunning;
+
         #endregion
+
+
+        #region Game Levels
+
+        [SerializeField, HideInInspector, Space]
+        private LevelFinish _levelFinish;
+
+        #endregion
+
+
+        #region Pickables
+
+        [SerializeField, HideInInspector, Space]
+        private PickableHandler _pickables;
+
+        private BonusSystem _bonusSystem;
+
+        #endregion
+
+
+        #region Effects
+
+        private CameraEffects _cameraEffects;
+
+        [SerializeField, HideInInspector, Range(0, 1f), Space]
+        private float _cameraSmoothTime;
+
+        #endregion
+
 
 
         private void Awake()
@@ -87,10 +147,21 @@ namespace Core
 
             _bulletsSystem = new BulletsSystem(_bulletMovementStats);
 
-            _enemiesSystem = new EnemiesSystem(_enemies.AllEnemies);
+            _enemySystem = new EnemySystem(_enemies, _spawnPositionPool);
 
 
-            _gameProgress = new GameProgress(_enemiesSystem);
+            _cameraEffects = new CameraEffects(Camera.main);
+
+
+            _gameProgress = new GameProgress(_enemySystem, _levelFinish);
+
+            _gameAnalytics = new GameAnalytics(_gameAnalyticsCosts);
+
+
+            _bonusSystem = new BonusSystem();
+
+
+            _isGameRunning = true;
         }
 
 
@@ -114,7 +185,30 @@ namespace Core
 
             _gameProgress.SetDamagers(_bulletPool.Bullets);
 
+            _gameProgress.SetTraps(_traps.Traps);
+
+            _gameProgress.SetPickables(_pickables.Pickables);
+
+            _gameProgress.SetLevelFinish(_levelFinish);
+
             _gameProgress.SetSystem();
+
+
+            _gameProgress.EnemyEnded += _gameAnalytics.OnEnemyEnded;
+
+            _gameProgress.PickingGarbage += _gameAnalytics.OnPickingGarbage;
+
+            _gameProgress.PickingBonus += _bonusSystem.OnPickingBonus;
+
+            _gameProgress.GameOver += OnGameOver;
+
+
+            _gameAnalytics.GoalAchieved += _gameProgress.OnGoalAchieved;
+
+
+            _bonusSystem.PickingHealth += _gameProgress.OnPickingHealth;
+
+            _bonusSystem.PickingShield += _gameProgress.OnPickingShield;
         }
 
 
@@ -138,23 +232,62 @@ namespace Core
 
             _gameProgress.UnsetDamagers(_bulletPool.Bullets);
 
+            _gameProgress.UnsetTraps(_traps.Traps);
+
+            _gameProgress.UnsetPickables(_pickables.Pickables);
+
+            _gameProgress.UnsetLevelFinish(_levelFinish);
+
             _gameProgress.UnsetSystem();
+
+
+            _gameProgress.EnemyEnded -= _gameAnalytics.OnEnemyEnded;
+
+            _gameProgress.PickingGarbage -= _gameAnalytics.OnPickingGarbage;
+
+            _gameProgress.PickingBonus -= _bonusSystem.OnPickingBonus;
+
+            _gameProgress.GameOver -= OnGameOver;
+
+
+            _gameAnalytics.GoalAchieved -= _gameProgress.OnGoalAchieved;
+
+
+            _bonusSystem.PickingHealth -= _gameProgress.OnPickingHealth;
+
+            _bonusSystem.PickingShield -= _gameProgress.OnPickingShield;
         }
 
 
         private void FixedUpdate()
         {
-            
+
+            if (!_isGameRunning) return;
+
             _playerSystem.HandleInput(_isInputRaw);
 
-            _enemiesSystem.HandleInput(_player.transform.position,
+
+            _enemySystem.HandleMovement(_player.transform.position,
                 _checkPositionTime);
+
+            _enemySystem.HandleSpawn(_spawnSettings);
 
 
             _shootingSystem.HandleInput();
 
 
             _bulletsSystem.HandleInput(_bulletLifeTime);
+
+
+            _cameraEffects.Follow(_player.transform.position,
+                _cameraSmoothTime);
+        }
+
+
+        private void OnGameOver()
+        {
+
+            _isGameRunning = false;
         }
     }
 }

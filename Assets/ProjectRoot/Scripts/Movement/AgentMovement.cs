@@ -1,30 +1,43 @@
-﻿using Characters;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 namespace Movement
 {
-    public sealed class AgentMovement
+    public class AgentMovement
     {
 
         private readonly NavMeshAgent _agent;
 
+        private readonly IMovementStats _stats;
 
-        public AgentMovement(IEnemy enemy)
+
+        public AgentMovement(IAgent agent)
         {
+            
+            _agent = agent.NavMeshAgent;
 
-            _agent = enemy.NavMeshAgent;
+            _stats = agent.MovementStats;
 
-            _agent.speed = enemy.MovementStats.Speed;
 
-            _agent.acceleration = enemy.MovementStats.Acceleration;
+            _agent.speed = _stats.Speed;
+
+            _agent.acceleration = _stats.Acceleration;
         }
 
 
-        public void MakeMovement(Vector3 destination)
+        public void SetDestination(Vector3 destination)
+        {
+            
+            _agent.destination = destination;
+        }
+    
+
+        public void Move(Vector3 destination)
         {
 
-            _agent.destination = destination;
+            destination *= _stats.Speed * Time.fixedDeltaTime;
+
+            _agent.Move(destination);
         }
     }
 }
