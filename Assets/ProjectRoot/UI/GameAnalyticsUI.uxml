@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/ProjectRoot/UI/panel.uss?fileID=7433441132597879392&amp;guid=8602a69a2d9a5b049a6f2512c62318e6&amp;type=3#panel" />
+    <ui:VisualElement name="screen" class="panel" style="flex-grow: 1; height: 400px; width: 100%; flex-direction: column; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="topBar" style="flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; justify-content: flex-start; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; display: flex; visibility: visible; height: 10%;">
+            <ui:VisualElement name="enemiesUI" style="flex-grow: 1; align-items: center; flex-direction: row; justify-content: flex-end; align-self: flex-end;">
+                <ui:VisualElement name="enemyIcon" style="background-image: url(&quot;project://database/Assets/ProjectRoot/Graphcis/UI/Zombie%20Icon.png?fileID=2800000&amp;guid=51bb07b1c168ac541a7a7fd58261aa59&amp;type=3#Zombie Icon&quot;); background-color: rgb(255, 255, 255); width: 50px; height: 50px; margin-top: 6px; margin-right: 6px; margin-bottom: 6px; margin-left: 6px; padding-top: 29px; padding-right: 29px; padding-bottom: 29px; padding-left: 29px;" />
+                <ui:Label tabindex="-1" text="0/10" parse-escape-sequences="true" display-tooltip-when-elided="true" name="enemyCounter" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 24px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="garbageUI" style="flex-grow: 1; align-items: center; flex-direction: row; justify-content: flex-end; align-self: flex-end;">
+                <ui:VisualElement name="garbageIcon" style="background-image: url(&quot;project://database/Assets/ProjectRoot/Graphcis/UI/Garbage%20Icon.png?fileID=2800000&amp;guid=7b204c7ae96a8de46a277defa52c96cf&amp;type=3#Garbage Icon&quot;); background-color: rgb(255, 255, 255); width: 50px; height: 50px; margin-top: 6px; margin-right: 6px; margin-bottom: 6px; margin-left: 6px; padding-top: 29px; padding-right: 29px; padding-bottom: 29px; padding-left: 29px;" />
+                <ui:Label tabindex="-1" text="0/10" parse-escape-sequences="true" display-tooltip-when-elided="true" name="garbageCounter" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 24px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement style="flex-grow: 1; height: 90%;" />
+</ui:UXML>

@@ -8,7 +8,7 @@
                     <ui:Label tabindex="-1" text="100" parse-escape-sequences="true" display-tooltip-when-elided="true" name="hpText" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; align-self: flex-start; justify-content: flex-start; align-items: stretch; -unity-font-style: bold; -unity-text-outline-width: 0.5px; -unity-text-outline-color: rgb(0, 0, 0); color: rgb(255, 255, 255);" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:Label tabindex="-1" text="0/10" parse-escape-sequences="true" display-tooltip-when-elided="true" name="garbageCounter" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 24px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            <ui:Label tabindex="-1" text="0/10" parse-escape-sequences="true" display-tooltip-when-elided="true" name="garbageCounter" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 24px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; display: none;" />
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; height: 100%;" />
         <ui:VisualElement name="endLevelScreen" style="flex-grow: 1; height: 100%; padding-left: 50%; padding-right: 20px; justify-content: space-between; align-items: flex-end; flex-direction: column; align-self: auto; background-color: rgba(0, 0, 0, 0.47); position: absolute; width: 100%; padding-top: 75px; visibility: hidden;">

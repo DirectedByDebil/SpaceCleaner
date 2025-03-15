@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using Views;
 
 namespace Core
 {
@@ -63,6 +64,8 @@ namespace Core
 
 
         #region Game Analytics
+
+        private SerializedProperty _gameAnalyticsView;
 
         private SerializedProperty _gameAnalyticsCosts;
 
@@ -133,6 +136,8 @@ namespace Core
 
             _cameraSmoothTime = serializedObject.FindProperty("_cameraSmoothTime");
 
+
+            _gameAnalyticsView = serializedObject.FindProperty("_gameAnalyticsView");
 
             _gameAnalyticsCosts = serializedObject.FindProperty("_gameAnalyticsCosts");
 
@@ -207,7 +212,9 @@ namespace Core
 
 
                 case DisplayCategory.GameAnalytics:
-                    
+
+                    DrawProperties(_gameAnalyticsView);
+
                     _costsDrawer.DrawCosts(_gameAnalyticsCosts);
                     break;
 

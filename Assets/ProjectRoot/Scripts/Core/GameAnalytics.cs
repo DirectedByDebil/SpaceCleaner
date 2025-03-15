@@ -7,9 +7,9 @@ namespace Core
     public sealed class GameAnalytics
     {
 
-        public event Action<int> GarbagePointsChanged;
+        public event Action<int, int> GarbagePointsChanged;
         
-        public event Action<int> EnemyPointsChanged;
+        public event Action<int, int> EnemyPointsChanged;
 
         public event Action GoalAchieved;
         
@@ -34,7 +34,6 @@ namespace Core
 
             IncreaseGarbagePoints(garbage.GarbageType);
 
-            GUIOutput.AddOutput("Garbage Points", _garbagePoints);
 
             garbage.OnPickedUp();
         }
@@ -44,10 +43,21 @@ namespace Core
         {
 
             IncreaseEnemyPoints(enemy.EnemyDifficulty);
-
-            GUIOutput.AddOutput("Enemy Points", _enemyPoints);
         }
 
+
+        public void RefreshPoints()
+        {
+
+            _enemyPoints = 0;
+
+            _garbagePoints = 0;
+
+
+            EnemyPointsChanged?.Invoke(_enemyPoints, _costs.EnemyPointsToWin);
+
+            GarbagePointsChanged?.Invoke(_garbagePoints, _costs.GarbagePointsToWin);
+        }
 
 
         private void IncreaseGarbagePoints(GarbageType garbageType)
@@ -55,12 +65,12 @@ namespace Core
 
             _garbagePoints += _costs.GetGarbagePoints(garbageType);
 
-            GarbagePointsChanged?.Invoke(_garbagePoints);
+            GarbagePointsChanged?.Invoke(_garbagePoints, _costs.GarbagePointsToWin);
 
 
             if(_garbagePoints >= _costs.GarbagePointsToWin)
             {
-                GUIOutput.AddOutput("Game Won",  "Garbage Points");
+
                 GoalAchieved?.Invoke();
             }
         }
@@ -71,13 +81,12 @@ namespace Core
 
             _enemyPoints += _costs.GetEnemyPoints(difficulty);
 
-            EnemyPointsChanged?.Invoke(_enemyPoints);
+            EnemyPointsChanged?.Invoke(_enemyPoints, _costs.EnemyPointsToWin);
 
 
             if(_enemyPoints >= _costs.EnemyPointsToWin)
             {
 
-                GUIOutput.AddOutput("Game Won", "Enemy Points");
                 GoalAchieved?.Invoke();
             }
         }

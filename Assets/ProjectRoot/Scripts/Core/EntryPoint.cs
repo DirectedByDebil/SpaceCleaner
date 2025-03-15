@@ -6,6 +6,7 @@ using Levels;
 using Movement;
 using Pickables;
 using Pickables.Bonuses;
+using Views;
 using UnityEngine;
 
 namespace Core
@@ -94,6 +95,10 @@ namespace Core
         private GameProgress _gameProgress;
 
         private GameAnalytics _gameAnalytics;
+
+
+        [SerializeField, HideInInspector, Space]
+        private GameAnalyticsView _gameAnalyticsView;
 
 
         [SerializeField, HideInInspector, Space]
@@ -203,6 +208,10 @@ namespace Core
             _gameProgress.GameOver += OnGameOver;
 
 
+            _gameAnalytics.EnemyPointsChanged += _gameAnalyticsView.OnEnemyPointsChanged;
+
+            _gameAnalytics.GarbagePointsChanged += _gameAnalyticsView.OnGarbagePointsChanged;
+
             _gameAnalytics.GoalAchieved += _gameProgress.OnGoalAchieved;
 
 
@@ -250,12 +259,23 @@ namespace Core
             _gameProgress.GameOver -= OnGameOver;
 
 
+            _gameAnalytics.EnemyPointsChanged -= _gameAnalyticsView.OnEnemyPointsChanged;
+
+            _gameAnalytics.GarbagePointsChanged -= _gameAnalyticsView.OnGarbagePointsChanged;
+
             _gameAnalytics.GoalAchieved -= _gameProgress.OnGoalAchieved;
 
 
             _bonusSystem.PickingHealth -= _gameProgress.OnPickingHealth;
 
             _bonusSystem.PickingShield -= _gameProgress.OnPickingShield;
+        }
+
+
+        private void Start()
+        {
+            
+            _gameAnalytics.RefreshPoints();
         }
 
 
