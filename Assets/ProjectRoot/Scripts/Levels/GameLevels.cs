@@ -10,9 +10,6 @@ namespace Levels
         private static List<string> _scenes;
 
 
-        private static string _nextLevel;
-
-
         public static void SetLevels(IEnumerable<string> scenes)
         {
 
@@ -20,7 +17,31 @@ namespace Levels
         }
 
 
-        public static void SetCurrentLevel()
+        public static void LoadNextLevel()
+        {
+
+            if(TryGetNextScene(out string sceneName))
+            {
+
+                SceneManager.LoadSceneAsync(sceneName);
+            }
+            else
+            {
+                Debug.LogError("Current Scene not in scenes list");
+            }
+        }
+
+
+        public static void RestartCurrentLevel()
+        {
+
+            Scene current = SceneManager.GetActiveScene();
+
+            SceneManager.LoadScene(current.name);
+        }
+
+
+        private static bool TryGetNextScene(out string sceneName)
         {
 
             Scene currentScene = SceneManager.GetActiveScene();
@@ -28,26 +49,22 @@ namespace Levels
             int index = _scenes.FindIndex((scene) => scene == currentScene.name);
 
 
-            if(index != -1)
+            if (index != -1)
             {
 
-                SetNextLevel(index);
+                sceneName = GetNextScene(index);
+
+                return true;
             }
-            else
-            {
-                Debug.LogError("Current Scene not in build");
-            }
+
+
+            sceneName = null;
+
+            return false;
         }
 
 
-        public static void LoadNextLevel()
-        {
-
-            SceneManager.LoadSceneAsync(_nextLevel);
-        }
-
-
-        private static void SetNextLevel(int currentIndex)
+        private static string GetNextScene(int currentIndex)
         {
 
             int nextIndex = currentIndex + 1;
@@ -59,7 +76,7 @@ namespace Levels
             }
 
 
-            _nextLevel = _scenes[nextIndex];
+            return _scenes[nextIndex];
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Core
 
         #region Bullets
 
-        private SerializedProperty _bulletPool;
+        private SerializedProperty _bulletPoolParent;
 
         private SerializedProperty _bulletMovementStats;
         
@@ -80,6 +80,8 @@ namespace Core
 
         private SerializedProperty _levelFinish;
 
+        private SerializedProperty _endLevelScreen;
+
         #endregion
 
 
@@ -115,7 +117,7 @@ namespace Core
             _gun = serializedObject.FindProperty("_gun");
 
 
-            _bulletPool = serializedObject.FindProperty("_bulletPool");
+            _bulletPoolParent = serializedObject.FindProperty("_bulletPoolParent");
 
             _bulletMovementStats = serializedObject.FindProperty("_bulletMovementStats");
             
@@ -145,6 +147,8 @@ namespace Core
 
 
             _levelFinish = serializedObject.FindProperty("_levelFinish");
+
+            _endLevelScreen = serializedObject.FindProperty("_endLevelScreen");
         }
 
 
@@ -179,7 +183,9 @@ namespace Core
 
                 case DisplayCategory.Bullets:
 
-                    DrawProperties(_bulletPool, _bulletMovementStats, _bulletLifeTime);
+                    DrawProperties(_bulletPoolParent,
+                        _bulletMovementStats, _bulletLifeTime);
+
                     break;
 
 
@@ -221,7 +227,7 @@ namespace Core
 
                 case DisplayCategory.Levels:
 
-                    DrawProperties(_levelFinish);
+                    DrawProperties(_levelFinish, _endLevelScreen);
                     break;
             }
         }

@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levels:
-  - Training
+  - Dev
   - Hall
   - Kitchen
   - Exit

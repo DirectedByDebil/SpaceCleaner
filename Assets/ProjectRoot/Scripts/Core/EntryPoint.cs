@@ -73,8 +73,9 @@ namespace Core
 
         #region Bullets System
 
-        [SerializeField, HideInInspector, Space]
-        private BulletPool _bulletPool;
+        [SerializeField, HideInInspector,
+            Tooltip("Parent for all bullet objects"), Space]
+        private Transform _bulletPoolParent;
 
 
         [SerializeField, HideInInspector, Space]
@@ -84,6 +85,8 @@ namespace Core
         [SerializeField, HideInInspector, Range(1, 3), Space]
         private float _bulletLifeTime;
 
+
+        private BulletPool _bulletPool;
 
         private BulletsSystem _bulletsSystem;
 
@@ -115,6 +118,10 @@ namespace Core
         [SerializeField, HideInInspector, Space]
         private LevelFinish _levelFinish;
 
+        
+        [SerializeField, HideInInspector, Space]
+        private EndLevelScreen _endLevelScreen;
+
         #endregion
 
 
@@ -145,12 +152,17 @@ namespace Core
             _playerSystem = new PlayerSystem(_player);
 
 
+            _bulletPool = new BulletPool(_bulletPoolParent.childCount);
+
+            _bulletPool.FindBullets(_bulletPoolParent);
+
+            _bulletsSystem = new BulletsSystem(_bulletMovementStats);
+
+
             _shootingSystem = new ShootingSystem(_bulletPool);
 
             _shootingSystem.AddGun(_gun);
 
-
-            _bulletsSystem = new BulletsSystem(_bulletMovementStats);
 
             _enemySystem = new EnemySystem(_enemies, _spawnPositionPool);
 
@@ -205,7 +217,11 @@ namespace Core
 
             _gameProgress.PickingBonus += _bonusSystem.OnPickingBonus;
 
-            _gameProgress.GameOver += OnGameOver;
+            _gameProgress.GameStopping += OnGameStopping;
+
+            _gameProgress.GameOver += _endLevelScreen.OnLost;
+
+            _gameProgress.GameWon += _endLevelScreen.OnWon;
 
 
             _gameAnalytics.EnemyPointsChanged += _gameAnalyticsView.OnEnemyPointsChanged;
@@ -220,7 +236,7 @@ namespace Core
             _bonusSystem.PickingShield += _gameProgress.OnPickingShield;
         }
 
-
+ 
         private void OnDisable()
         {
 
@@ -231,7 +247,7 @@ namespace Core
 
             _shootingSystem.ShootingBullet -= _bulletsSystem.OnShootingBullet;
 
-
+            
             _bulletsSystem.UnsetSystem(_bulletPool.Bullets);
             
 
@@ -256,7 +272,11 @@ namespace Core
 
             _gameProgress.PickingBonus -= _bonusSystem.OnPickingBonus;
 
-            _gameProgress.GameOver -= OnGameOver;
+            _gameProgress.GameStopping -= OnGameStopping;
+
+            _gameProgress.GameOver -= _endLevelScreen.OnLost;
+
+            _gameProgress.GameWon -= _endLevelScreen.OnWon;
 
 
             _gameAnalytics.EnemyPointsChanged -= _gameAnalyticsView.OnEnemyPointsChanged;
@@ -276,6 +296,9 @@ namespace Core
         {
             
             _gameAnalytics.RefreshPoints();
+
+
+            _endLevelScreen.Hide();
         }
 
 
@@ -304,10 +327,15 @@ namespace Core
         }
 
 
-        private void OnGameOver()
+        private void OnGameStopping()
         {
 
             _isGameRunning = false;
+
+
+            _player.UI.Hide();
+
+            _gameAnalyticsView.Hide();
         }
     }
 }

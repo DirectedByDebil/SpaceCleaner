@@ -1,5 +1,6 @@
 ﻿using Characters;
 using Core;
+using Views;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -19,7 +20,7 @@ namespace Combat.Views
         private GameObject _shield;
 
 
-        void OnEnable()
+        private void OnEnable()
         {
             _player = GetComponent<Player>();
 
@@ -93,6 +94,20 @@ namespace Combat.Views
 
             // Get the resolved style of the VisualElement
             _hpBarWidthCoef = element.resolvedStyle.width / _player.HealthStats.MaxHp;
+        }
+
+
+        public void Show()
+        {
+
+            uiDocument.Show();
+        }
+
+
+        public void Hide()
+        {
+
+            uiDocument.Hide();
         }
     }
 }

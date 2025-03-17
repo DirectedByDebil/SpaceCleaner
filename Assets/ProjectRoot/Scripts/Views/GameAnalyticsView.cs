@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Views
 {
-    public sealed class GameAnalyticsView : MonoBehaviour
+    public sealed class GameAnalyticsView : MonoBehaviour, IScreen
     {
 
         [SerializeField] private UIDocument _document;
@@ -24,6 +24,7 @@ namespace Views
         }
 
 
+        #region On Points Changed
 
         public void OnEnemyPointsChanged(int points, int goal)
         {
@@ -35,7 +36,6 @@ namespace Views
         }
 
 
-
         public void OnGarbagePointsChanged(int points, int goal)
         {
 
@@ -44,6 +44,27 @@ namespace Views
 
             CheckWin(_garbageLabel, points >= goal);
         }
+
+        #endregion
+
+
+
+        #region Show/Hide
+
+        public void Show()
+        {
+
+            _document.Show();
+        }
+
+
+        public void Hide()
+        {
+
+            _document.Hide();
+        }
+
+        #endregion
 
 
         private void UpdateText(Label label, int points , int goal)

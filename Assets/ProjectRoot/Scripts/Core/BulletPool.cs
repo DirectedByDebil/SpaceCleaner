@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public sealed class BulletPool : MonoBehaviour, IPool<IBullet>
+    public sealed class BulletPool : IPool<IBullet>
     {
 
         public IReadOnlyCollection<IBullet> Bullets
@@ -13,20 +13,26 @@ namespace Core
         }
 
 
-        [SerializeField]
         private List<Bullet> _bullets;
 
 
-        private void OnValidate()
+        public BulletPool(int capacity)
+        {
+
+            _bullets = new List<Bullet>(capacity);
+        }
+
+
+        public void FindBullets(Transform parent)
         {
 
             _bullets.Clear();
 
 
-            foreach(Transform child in transform)
+            foreach (Transform child in parent)
             {
 
-                if(child.TryGetComponent(out Bullet bullet))
+                if (child.TryGetComponent(out Bullet bullet))
                 {
 
                     _bullets.Add(bullet);

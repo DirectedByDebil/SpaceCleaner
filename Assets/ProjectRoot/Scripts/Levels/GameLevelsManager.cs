@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 namespace Levels
@@ -14,6 +15,13 @@ namespace Levels
         {
             
             GameLevels.SetLevels(_levels);
+        }
+
+
+        private void Start()
+        {
+
+            SceneManager.LoadSceneAsync(_levels[0]);
         }
     }
 }

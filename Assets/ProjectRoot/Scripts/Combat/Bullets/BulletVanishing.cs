@@ -45,9 +45,13 @@ namespace Combat.Bullets
             foreach (IPhysical bullet in bullets)
             {
 
-                VanishingGameObject body = _bullets[bullet.Rigidbody.gameObject];
+                if((Bullet)bullet)
+                {
 
-                body.Vanishing -= OnVanishing;
+                    VanishingGameObject body = _bullets[bullet.Rigidbody.gameObject];
+
+                    body.Vanishing -= OnVanishing;
+                }
             }
         }
 

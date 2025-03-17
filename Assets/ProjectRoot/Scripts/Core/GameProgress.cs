@@ -12,7 +12,12 @@ namespace Core
     public sealed class GameProgress
     {
 
+        public event Action GameWon;
+
         public event Action GameOver;
+
+        public event Action GameStopping;
+
 
         public event Action<IEnemy> EnemyEnded;
 
@@ -66,9 +71,13 @@ namespace Core
         public void UnsetPlayer(Player player)
         {
 
-            _combatSystem.RemoveCharacter(player);
+            if(player)
+            {
 
-            _characters.Remove(player.gameObject);
+                _combatSystem.RemoveCharacter(player);
+
+                _characters.Remove(player.gameObject);
+            }
         }
 
         #endregion
@@ -162,8 +171,11 @@ namespace Core
 
                 _combatSystem.RemoveCharacter(enemy);
 
-                _characters.Remove(enemy.gameObject);
+                if(enemy)
+                {
 
+                    _characters.Remove(enemy.gameObject);
+                }
 
                 _enemySystem.RemoveEnemy(enemy);
             }
@@ -307,8 +319,9 @@ namespace Core
             else if (character is IPlayer player)
             {
 
+                StopGame();
+                
                 GameOver?.Invoke();
-                GUIOutput.AddOutput("Game over", "(((((");
             }
         }
         
@@ -337,10 +350,21 @@ namespace Core
         }
 
 
+        private void StopGame()
+        {
+            //#TODO stop game
+
+            GameStopping?.Invoke();
+        }
+
+
         private void OnFinishing()
         {
 
-            GUIOutput.AddOutput("Level", "Finishing");
+            StopGame();
+
+
+            GameWon?.Invoke();
         }
 
 

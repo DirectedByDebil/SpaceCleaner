@@ -39,7 +39,6 @@ namespace Characters
         public void RemoveEnemy(IEnemy enemy)
         {
 
-
             _enemyMovement.RemoveEnemy(enemy);
 
             _enemySpawn.RemoveEnemy();
