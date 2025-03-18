@@ -121,7 +121,7 @@ namespace Core
 
                 body.position = _currentGun.MuzzlePosition;
 
-                body.velocity = Vector3.zero;
+                body.linearVelocity = Vector3.zero;
 
 
                 ShootingBullet?.Invoke(bullet, direction);

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a729ef46009cbc4995afaec5732bbb2, type: 3}
   m_Name: Player HP
   m_EditorClassIdentifier: 
-  <MaxHp>k__BackingField: 10
+  <MaxHp>k__BackingField: 20
   <HasShield>k__BackingField: 0

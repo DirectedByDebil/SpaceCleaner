@@ -14,4 +14,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ProjectRoot/Scenes/Dev.unity
     guid: deb99af8050561840a48030e072dff0a
+  - enabled: 1
+    path: Assets/ProjectRoot/Scenes/CleaningArena.unity
+    guid: 2f6c58e649f69904eaf538610fac95e9
+  - enabled: 1
+    path: Assets/ProjectRoot/Scenes/CleaningLevel.unity
+    guid: ea1a65adb8779814ab576a77a90152fe
+  - enabled: 1
+    path: Assets/ProjectRoot/Scenes/MainMenu.unity
+    guid: 5c5405c31656237439251e98ec8c2fd6
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
