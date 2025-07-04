@@ -16,8 +16,11 @@ namespace Combat.Views
 
         private Label _hpBarNumberLabel;
 
+
         [SerializeField, Space]
         private GameObject _shield;
+
+        private ProgressBar _shieldBar;
 
 
         private void OnEnable()
@@ -30,6 +33,11 @@ namespace Combat.Views
 
             _hpBarNumberLabel = uiDocument.rootVisualElement.Q<Label>("hpText");
             _hpBarNumberLabel.text = _player.HealthStats.MaxHp.ToString();
+
+
+            _shieldBar = uiDocument.GetProgressBar("shield-bar");
+
+            _shieldBar.Hide();
         }
 
 
@@ -52,6 +60,8 @@ namespace Combat.Views
         {
 
             SetShield(false);
+
+            _shieldBar?.Hide();
         }
 
 
@@ -59,13 +69,21 @@ namespace Combat.Views
         {
 
             SetShield(true);
+
+            _shieldBar?.Show();
         }
 
 
         public void OnShieldWorking(float percent)
         {
 
-            GUIOutput.AddOutput("Shield", $"{100 - percent * 100} %");
+            //GUIOutput.AddOutput("Shield", $"{100 - percent * 100} %");
+
+            if(_shieldBar != null)
+            {
+
+                _shieldBar.value = 100 - percent*100;
+            }
         }
 
 

@@ -20,6 +20,13 @@ namespace Views
             return document.rootVisualElement.Q<Button>(name);
         }
 
+
+        public static ProgressBar GetProgressBar(this UIDocument document, string name)
+        {
+
+            return document.rootVisualElement.Q<ProgressBar>(name);
+        }
+
         #endregion
 
 
@@ -36,6 +43,20 @@ namespace Views
         {
 
             document.rootVisualElement.style.display = DisplayStyle.None;
+        }
+
+
+        public static void Show(this VisualElement element)
+        {
+
+            element.style.display = DisplayStyle.Flex;
+        }
+
+
+        public static void Hide(this VisualElement element)
+        {
+
+            element.style.display = DisplayStyle.None;
         }
 
         #endregion
